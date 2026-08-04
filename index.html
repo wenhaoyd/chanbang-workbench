@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>象邦工作台 - 登录</title>
+<style>
+:root {
+  --bg-primary: #f7f5f0;
+  --bg-card: #ffffff;
+  --bg-sidebar: #0f2b46;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-light: #ffffff;
+  --accent: #c8a24a;
+  --accent-hover: #b8923a;
+  --accent-light: #f5eedb;
+  --border: #e0dcd5;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --danger: #e74c3c;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --info: #3498db;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ===== LOGIN PAGE ===== */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2b46 0%, #1a3d5c 50%, #0f2b46 100%);
+  padding: 20px;
+}
+
+.login-container {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-logo {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f2b46;
+  letter-spacing: 2px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(200,162,74,0.15);
+}
+
+.form-input::placeholder {
+  color: #bbb;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent), #b8923a);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #b8923a, #a68230);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(200,162,74,0.4);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+.login-error {
+  background: #fdeaea;
+  color: var(--danger);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-top: 12px;
+  display: none;
+  text-align: center;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== WORKBENCH LAYOUT ===== */
+.workbench {
+  display: none;
+  min-height: 100vh;
+}
+
+.workbench.active {
+  display: flex;
+}
+
+.login-page.hidden {
+  display: none;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: var(--bg-sidebar);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo {
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: rgba(200,162,74,0.2);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.user-info:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.user-role {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+.logout-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+}
+
+.logout-btn:hover {
+  color: var(--danger);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 240px;
+  padding: 28px 32px;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f2b46;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid transparent;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  border-color: var(--accent);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.stat-icon.blue { background: #e8f4fd; }
+.stat-icon.orange { background: #fff3e0; }
+.stat-icon.green { background: #e8f5e9; }
+.stat-icon.purple { background: #f3e5f5; }
+.stat-icon.red { background: #fdeaea; }
+.stat-icon.gold { background: var(--accent-light); }
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Dashboard Sections */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.dashboard-section {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.dashboard-section.full {
+  grid-column: 1 / -1;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f2b46;
+}
+
+.section-action {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.section-action:hover {
+  color: var(--accent-hover);
+}
+
+/* Plan / Task Items */
+.task-list {
+  list-style: none;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.task-item:hover {
+  background: var(--bg-primary);
+  border-color: var(--border);
+}
+
+.task-check {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.task-check.done {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.task-title.done {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.task-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+.task-status {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.task-status.in-progress {
+  background: #fff3e0;
+  color: #e67e22;
+}
+
+.task-status.done {
+  background: #e8f5e9;
+  color: var(--success);
+}
+
+.task-status.overdue {
+  background: #fdeaea;
+  color: var(--danger);
+}
+
+/* Inspiration / Memo */
+.memo-card {
+  background: var(--bg-primary);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  border-left: 3px solid var(--accent);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.memo-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.memo-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.memo-time {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 8px;
+}
+
+/* Business Section */
+.business-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.business-card {
+  background: var(--bg-primary);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.business-card:hover {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.business-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.business-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.business-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 32px 20px;
+  color: #bbb;
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.empty-text {
+  font-size: 14px;
+}
+
+/* Page Sections (hidden by default) */
+.page-section {
+  display: none;
+}
+
+.page-section.active {
+  display: block;
+}
+
+/* Quick Add */
+.quick-add {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.quick-add input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: var(--bg-primary);
+  transition: all 0.2s;
+}
+
+.quick-add input:focus {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.quick-add button {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.quick-add button:hover {
+  background: var(--accent-hover);
+}
+
+/* Reminder Popup */
+.reminder-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.reminder-overlay.show {
+  display: flex;
+}
+
+.reminder-popup {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.reminder-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #0f2b46;
+}
+
+.reminder-list {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.reminder-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.reminder-item:last-child {
+  border-bottom: none;
+}
+
+.reminder-close {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  z-index: 300;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .business-list {
+    grid-template-columns: 1fr;
+  }
+  .mobile-menu-btn {
+    display: block !important;
+  }
+}
+
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 150;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-sidebar);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div class="login-page" id="loginPage">
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">🛡️</div>
+      <div class="login-title">象邦工作台</div>
+      <div class="login-subtitle">Chanbang Workbench</div>
+    </div>
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">用户名</label>
+        <input type="text" class="form-input" id="username" placeholder="请输入用户名" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">密码</label>
+        <input type="password" class="form-input" id="password" placeholder="请输入密码" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn">登 录</button>
+      <div class="login-error" id="loginError">用户名或密码错误</div>
+    </form>
+    <div class="login-footer">&copy; 2026 象邦 · Chanbang. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- ===== WORKBENCH ===== -->
+<div class="workbench" id="workbench">
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">🛡️</div>
+      <div class="sidebar-title">象邦工作台</div>
+    </div>
+    <div class="sidebar-nav">
+      <a class="nav-item active" onclick="navTo('dashboard', this)" data-page="dashboard">
+        <span class="nav-icon">📊</span> 工作概览
+      </a>
+      <a class="nav-item" onclick="navTo('plans', this)" data-page="plans">
+        <span class="nav-icon">📋</span> 工作计划
+        <span class="nav-badge" id="planBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('memos', this)" data-page="memos">
+        <span class="nav-icon">💡</span> 灵感记录
+        <span class="nav-badge" id="memoBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('cases', this)" data-page="cases">
+        <span class="nav-icon">⚖️</span> 律所案件
+        <span class="nav-badge" id="caseBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('certificates', this)" data-page="certificates">
+        <span class="nav-icon">📄</span> 证件业务
+        <span class="nav-badge" id="certBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('others', this)" data-page="others">
+        <span class="nav-icon">📁</span> 其他业务
+        <span class="nav-badge" id="otherBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('materials', this)" data-page="materials">
+        <span class="nav-icon">📚</span> 业务材料库
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="sidebarAvatar">管</div>
+        <div>
+          <div class="user-name" id="sidebarName">管理员</div>
+          <div class="user-role">象邦工作台</div>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()" title="退出登录">🚪</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Dashboard Page -->
+    <section class="page-section active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title">工作概览</div>
+        <div class="page-subtitle">欢迎回来，这是你的工作全景</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card" onclick="navTo('plans')">
+          <div class="stat-icon blue">📋</div>
+          <div>
+            <div class="stat-value" id="statPlansInProgress">0</div>
+            <div class="stat-label">进行中计划</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="navTo('plans')">
+          <div class="stat-icon red">⚠️</div>
+          <div>
+            <div class="stat-value" id="statPlansOverdue">0</div>
+            <div class="stat-label">逾期计划</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="navTo('plans')">
+          <div class="stat-icon green">✅</div>
+          <div>
+            <div class="stat-value" id="statPlansDone">0</div>
+            <div class="stat-label">已完成计划</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="navTo('memos')">
+          <div class="stat-icon purple">💡</div>
+          <div>
+            <div class="stat-value" id="statMemos">0</div>
+            <div class="stat-label">灵感记录</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="navTo('cases')">
+          <div class="stat-icon gold">⚖��</div>
+          <div>
+            <div class="stat-value" id="statCases">0</div>
+            <div class="stat-label">律所案件</div>
+          </div>
+        </div>
+        <div class="stat-card" onclick="navTo('certificates')">
+          <div class="stat-icon orange">📄</div>
+          <div>
+            <div class="stat-value" id="statCertificates">0</div>
+            <div class="stat-label">证件/其他业务</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Recent Plans -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <div class="section-title">📋 今日工作计划</div>
+            <span class="section-action" onclick="navTo('plans')">查看全部 →</span>
+          </div>
+          <ul class="task-list" id="recentPlans"></ul>
+          <div class="empty-state" id="emptyPlans">
+            <div class="empty-icon">📋</div>
+            <div class="empty-text">暂无进行中的计划</div>
+          </div>
+        </div>
+
+        <!-- Recent Memos -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <div class="section-title">💡 最近灵感</div>
+            <span class="section-action" onclick="navTo('memos')">查看全部 →</span>
+          </div>
+          <div id="recentMemos"></div>
+          <div class="empty-state" id="emptyMemos">
+            <div class="empty-icon">💡</div>
+            <div class="empty-text">还没有灵感记录</div>
+          </div>
+        </div>
+
+        <!-- Business Overview -->
+        <div class="dashboard-section full">
+          <div class="section-header">
+            <div class="section-title">📂 业务板块</div>
+          </div>
+          <div class="business-list">
+            <div class="business-card" onclick="navTo('cases')">
+              <div class="business-icon">⚖️</div>
+              <div class="business-name">律所业务</div>
+              <div class="business-count" id="bizCases">0 个案件</div>
+            </div>
+            <div class="business-card" onclick="navTo('certificates')">
+              <div class="business-icon">📄</div>
+              <div class="business-name">证件业务</div>
+              <div class="business-count" id="bizCerts">0 笔</div>
+            </div>
+            <div class="business-card" onclick="navTo('others')">
+              <div class="business-icon">📁</div>
+              <div class="business-name">其他业务</div>
+              <div class="business-count" id="bizOthers">0 笔</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Plans Page -->
+    <section class="page-section" id="page-plans">
+      <div class="page-header">
+        <div class="page-title">工作计划</div>
+        <div class="page-subtitle">管理你的所有工作安排与任务</div>
+      </div>
+      <div class="quick-add">
+        <input type="text" id="planInput" placeholder="添加新计划... 例：完成老挝土地投资可行性报告" onkeydown="if(event.key==='Enter')addPlan()">
+        <button onclick="addPlan()">+ 添加计划</button>
+      </div>
+      <div class="dashboard-section">
+        <ul class="task-list" id="allPlans"></ul>
+        <div class="empty-state" id="emptyAllPlans">
+          <div class="empty-icon">📋</div>
+          <div class="empty-text">还没有任何计划，赶紧添加一个吧</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Memos Page -->
+    <section class="page-section" id="page-memos">
+      <div class="page-header">
+        <div class="page-title">灵感记录</div>
+        <div class="page-subtitle">随时记录你的灵感和想法</div>
+      </div>
+      <div class="quick-add">
+        <input type="text" id="memoInput" placeholder="记录灵感... 例：可以考虑在老挝注册合资公司来享受税收优惠" onkeydown="if(event.key==='Enter')addMemo()">
+        <button onclick="addMemo()">+ 记录</button>
+      </div>
+      <div id="allMemos"></div>
+      <div class="empty-state" id="emptyAllMemos">
+        <div class="empty-icon">💡</div>
+        <div class="empty-text">还没有灵感记录，开始记录吧</div>
+      </div>
+    </section>
+
+    <!-- Cases Page -->
+    <section class="page-section" id="page-cases">
+      <div class="page-header">
+        <div class="page-title">律所案件</div>
+        <div class="page-subtitle">管理律所相关的案件与业务</div>
+      </div>
+      <div class="quick-add">
+        <input type="text" id="caseInput" placeholder="添加新案件..." onkeydown="if(event.key==='Enter')addCase()">
+        <button onclick="addCase()">+ 添加案件</button>
+      </div>
+      <div class="dashboard-section">
+        <ul class="task-list" id="allCases"></ul>
+        <div class="empty-state" id="emptyAllCases">
+          <div class="empty-icon">⚖️</div>
+          <div class="empty-text">暂无案件记录</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificates Page -->
+    <section class="page-section" id="page-certificates">
+      <div class="page-header">
+        <div class="page-title">证件业务</div>
+        <div class="page-subtitle">管理证件代办业务</div>
+      </div>
+      <div class="quick-add">
+        <input type="text" id="certInput" placeholder="添加证件业务..." onkeydown="if(event.key==='Enter')addCert()">
+        <button onclick="addCert()">+ 添加</button>
+      </div>
+      <div class="dashboard-section">
+        <ul class="task-list" id="allCerts"></ul>
+        <div class="empty-state" id="emptyAllCerts">
+          <div class="empty-icon">📄</div>
+          <div class="empty-text">暂无证件业务</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Others Page -->
+    <section class="page-section" id="page-others">
+      <div class="page-header">
+        <div class="page-title">其他业务</div>
+        <div class="page-subtitle">���理其他各类业务</div>
+      </div>
+      <div class="quick-add">
+        <input type="text" id="otherInput" placeholder="添加其他业务..." onkeydown="if(event.key==='Enter')addOther()">
+        <button onclick="addOther()">+ 添加</button>
+      </div>
+      <div class="dashboard-section">
+        <ul class="task-list" id="allOthers"></ul>
+        <div class="empty-state" id="emptyAllOthers">
+          <div class="empty-icon">📁</div>
+          <div class="empty-text">暂无其他业务</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Materials Page -->
+    <section class="page-section" id="page-materials">
+      <div class="page-header">
+        <div class="page-title">业务材料库</div>
+        <div class="page-subtitle">管理和查看业务相关的模板与材料</div>
+      </div>
+      <div class="dashboard-section">
+        <ul class="task-list" id="allMaterials"></ul>
+        <div class="empty-state" id="emptyAllMaterials">
+          <div class="empty-icon">📚</div>
+          <div class="empty-text">暂无材料模板</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Reminder Popup -->
+<div class="reminder-overlay" id="reminderOverlay">
+  <div class="reminder-popup">
+    <div class="reminder-title">🔔 待办提醒</div>
+    <ul class="reminder-list" id="reminderList"></ul>
+    <button class="reminder-close" onclick="closeReminder()">知道了</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ AUTH SYSTEM ============
+const APP_PREFIX = 'chanbang_workbench';
+const DEFAULT_USERS = {
+  'admin': { password: 'admin123', name: '管理员', initial: '管' },
+  'guanlin': { password: 'guanlin2024', name: '广西冠林', initial: '冠' },
+};
+
+function getUsers() {
+  const stored = localStorage.getItem(APP_PREFIX + '_users');
+  return stored ? JSON.parse(stored) : DEFAULT_USERS;
+}
+
+function saveUsers(users) {
+  localStorage.setItem(APP_PREFIX + '_users', JSON.stringify(users));
+}
+
+function getCurrentUser() {
+  const stored = localStorage.getItem(APP_PREFIX + '_current_user');
+  return stored ? JSON.parse(stored) : null;
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const users = getUsers();
+
+  if (users[username] && users[username].password === password) {
+    const user = { username, ...users[username] };
+    localStorage.setItem(APP_PREFIX + '_current_user', JSON.stringify(user));
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('workbench').classList.add('active');
+    document.getElementById('sidebarAvatar').textContent = user.initial;
+    document.getElementById('sidebarName').textContent = user.name;
+    loadAllData();
+    checkReminders();
+    showToast('登录成功，欢迎回来！', 'success');
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('password').value = '';
+    document.getElementById('password').focus();
+  }
+  return false;
+}
+
+function handleLogout() {
+  if (confirm('确定要退出登录吗？')) {
+    localStorage.removeItem(APP_PREFIX + '_current_user');
+    location.reload();
+  }
+}
+
+// ============ DATA MANAGEMENT ============
+function getData(key) {
+  const stored = localStorage.getItem(APP_PREFIX + '_' + key);
+  return stored ? JSON.parse(stored) : [];
+}
+
+function setData(key, data) {
+  localStorage.setItem(APP_PREFIX + '_' + key, JSON.stringify(data));
+}
+
+// ============ INITIALIZATION ============
+(function init() {
+  const user = getCurrentUser();
+  if (user) {
+    // Already logged in
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('workbench').classList.add('active');
+    document.getElementById('sidebarAvatar').textContent = user.initial || '管';
+    document.getElementById('sidebarName').textContent = user.name || '管理员';
+    loadAllData();
+    // Check reminders after a short delay
+    setTimeout(checkReminders, 1000);
+  }
+  // Initialize materials if empty
+  if (getData('materials').length === 0) {
+    setData('materials', [
+      { id: 1, title: '投资协议模板（中老双语）', type: 'template', date: '2026-07-15' },
+      { id: 2, title: '尽职调查报告模板', type: 'template', date: '2026-07-15' },
+      { id: 3, title: '章程范本', type: 'template', date: '2026-07-18' },
+      { id: 4, title: '老挝土地租赁协议模板', type: 'template', date: '2026-07-20' },
+      { id: 5, title: 'MOU框架协议模版', type: 'template', date: '2026-07-22' },
+      { id: 6, title: '环境影响评估报告模板', type: 'template', date: '2026-07-25' },
+      { id: 7, title: '可行性研究报告模板', type: 'template', date: '2026-07-25' },
+      { id: 8, title: '特许经营协议框架', type: 'template', date: '2026-07-28' },
+      { id: 9, title: '合资公司设立流程指南', type: 'guide', date: '2026-07-30' },
+      { id: 10, title: '税务登记申报表', type: 'form', date: '2026-08-01' },
+      { id: 11, title: '股东决议书模板', type: 'template', date: '2026-08-01' },
+      { id: 12, title: '公司章程修正案模板', type: 'template', date: '2026-08-02' },
+      { id: 13, title: '营业执照变更申请表', type: 'form', date: '2026-08-02' },
+      { id: 14, title: '投资许可证申请材料清单', type: 'checklist', date: '2026-08-03' },
+      { id: 15, title: '员工劳动合同模板（老挝语）', type: 'template', date: '2026-08-03' },
+    ]);
+  }
+})();
+
+// ============ NAVIGATION ============
+function navTo(page, el) {
+  if (typeof el === 'string') {
+    // Called from dashboard stat cards
+    page = el;
+  }
+
+  // Update nav active state
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (navItem) navItem.classList.add('active');
+
+  // Show page
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  const pageSection = document.getElementById('page-' + page);
+  if (pageSection) pageSection.classList.add('active');
+
+  // Refresh data
+  loadAllData();
+
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('mobile-open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+}
+
+// Click outside sidebar to close on mobile
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar.classList.contains('mobile-open') && !sidebar.contains(e.target) && !e.target.classList.contains('mobile-menu-btn')) {
+    sidebar.classList.remove('mobile-open');
+  }
+});
+
+// ============ PLANS ============
+function addPlan() {
+  const input = document.getElementById('planInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const plans = getData('plans');
+  const newPlan = {
+    id: Date.now(),
+    title: text,
+    status: 'in-progress', // in-progress, done
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+  };
+  plans.unshift(newPlan);
+  setData('plans', plans);
+  input.value = '';
+  loadAllData();
+  showToast('计划已添加', 'success');
+}
+
+function togglePlan(id) {
+  const plans = getData('plans');
+  const plan = plans.find(p => p.id === id);
+  if (plan) {
+    plan.status = plan.status === 'done' ? 'in-progress' : 'done';
+    setData('plans', plans);
+    loadAllData();
+  }
+}
+
+function deletePlan(id) {
+  if (!confirm('确定要删除这个计划��？')) return;
+  let plans = getData('plans');
+  plans = plans.filter(p => p.id !== id);
+  setData('plans', plans);
+  loadAllData();
+}
+
+function renderPlans() {
+  const plans = getData('plans');
+  const inProgress = plans.filter(p => p.status === 'in-progress');
+  const done = plans.filter(p => p.status === 'done');
+
+  // Stats
+  document.getElementById('statPlansInProgress').textContent = inProgress.length;
+  document.getElementById('statPlansDone').textContent = done.length;
+  document.getElementById('statPlansOverdue').textContent = '0';
+  document.getElementById('planBadge').textContent = inProgress.length;
+
+  // Recent plans (dashboard)
+  const recentPlansEl = document.getElementById('recentPlans');
+  const emptyPlansEl = document.getElementById('emptyPlans');
+  recentPlansEl.innerHTML = '';
+  const recent = inProgress.slice(0, 5);
+  if (recent.length === 0) {
+    emptyPlansEl.style.display = 'block';
+  } else {
+    emptyPlansEl.style.display = 'none';
+    recent.forEach(p => {
+      recentPlansEl.innerHTML += planItemHTML(p);
+    });
+  }
+
+  // All plans
+  const allPlansEl = document.getElementById('allPlans');
+  const emptyAllPlansEl = document.getElementById('emptyAllPlans');
+  allPlansEl.innerHTML = '';
+  if (plans.length === 0) {
+    emptyAllPlansEl.style.display = 'block';
+  } else {
+    emptyAllPlansEl.style.display = 'none';
+    const sorted = [...plans].sort((a, b) => {
+      if (a.status === 'done' && b.status !== 'done') return 1;
+      if (a.status !== 'done' && b.status === 'done') return -1;
+      return b.id - a.id;
+    });
+    sorted.forEach(p => {
+      allPlansEl.innerHTML += planItemHTML(p);
+    });
+  }
+}
+
+function planItemHTML(p) {
+  const isDone = p.status === 'done';
+  return `
+    <li class="task-item">
+      <div class="task-check ${isDone ? 'done' : ''}" onclick="togglePlan(${p.id})">${isDone ? '✓' : ''}</div>
+      <div class="task-content">
+        <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(p.title)}</div>
+        <div class="task-meta">${p.date} ${p.time || ''}</div>
+      </div>
+      <span class="task-status ${p.status}">${isDone ? '已完成' : '进行中'}</span>
+      <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deletePlan(${p.id})" title="删除">🗑️</span>
+    </li>`;
+}
+
+// ============ MEMOS ============
+function addMemo() {
+  const input = document.getElementById('memoInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const memos = getData('memos');
+  memos.unshift({
+    id: Date.now(),
+    text,
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+  });
+  setData('memos', memos);
+  input.value = '';
+  loadAllData();
+  showToast('灵感已记录', 'success');
+}
+
+function deleteMemo(id) {
+  if (!confirm('确定要删除这条记录吗？')) return;
+  let memos = getData('memos');
+  memos = memos.filter(m => m.id !== id);
+  setData('memos', memos);
+  loadAllData();
+}
+
+function renderMemos() {
+  const memos = getData('memos');
+  document.getElementById('statMemos').textContent = memos.length;
+  document.getElementById('memoBadge').textContent = memos.length;
+
+  // Recent (dashboard)
+  const recentMemosEl = document.getElementById('recentMemos');
+  const emptyMemosEl = document.getElementById('emptyMemos');
+  recentMemosEl.innerHTML = '';
+  if (memos.length === 0) {
+    emptyMemosEl.style.display = 'block';
+  } else {
+    emptyMemosEl.style.display = 'none';
+    memos.slice(0, 3).forEach(m => {
+      recentMemosEl.innerHTML += `
+        <div class="memo-card">
+          <div class="memo-text">${escapeHTML(m.text)}</div>
+          <div class="memo-time">${m.date} ${m.time}</div>
+        </div>`;
+    });
+  }
+
+  // All memos
+  const allMemosEl = document.getElementById('allMemos');
+  const emptyAllMemosEl = document.getElementById('emptyAllMemos');
+  allMemosEl.innerHTML = '';
+  if (memos.length === 0) {
+    emptyAllMemosEl.style.display = 'block';
+  } else {
+    emptyAllMemosEl.style.display = 'none';
+    memos.forEach(m => {
+      allMemosEl.innerHTML += `
+        <div class="memo-card">
+          <div class="memo-text">${escapeHTML(m.text)}</div>
+          <div class="memo-time">${m.date} ${m.time}</div>
+          <span style="float:right;cursor:pointer;color:#ccc;font-size:12px;" onclick="deleteMemo(${m.id})">删除</span>
+        </div>`;
+    });
+  }
+}
+
+// ============ CASES ============
+function addCase() {
+  const input = document.getElementById('caseInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const cases = getData('cases');
+  cases.unshift({
+    id: Date.now(),
+    title: text,
+    status: 'in-progress',
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+  });
+  setData('cases', cases);
+  input.value = '';
+  loadAllData();
+  showToast('案件已添加', 'success');
+}
+
+function toggleCase(id) {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  if (c) {
+    c.status = c.status === 'done' ? 'in-progress' : 'done';
+    setData('cases', cases);
+    loadAllData();
+  }
+}
+
+function deleteCase(id) {
+  if (!confirm('确定要删除吗？')) return;
+  let cases = getData('cases');
+  cases = cases.filter(x => x.id !== id);
+  setData('cases', cases);
+  loadAllData();
+}
+
+function renderCases() {
+  const cases = getData('cases');
+  const inProgress = cases.filter(c => c.status === 'in-progress');
+  document.getElementById('statCases').textContent = cases.length;
+  document.getElementById('caseBadge').textContent = inProgress.length;
+  document.getElementById('bizCases').textContent = cases.length + ' 个案件';
+
+  const allCasesEl = document.getElementById('allCases');
+  const emptyEl = document.getElementById('emptyAllCases');
+  allCasesEl.innerHTML = '';
+  if (cases.length === 0) {
+    emptyEl.style.display = 'block';
+  } else {
+    emptyEl.style.display = 'none';
+    cases.forEach(c => {
+      const isDone = c.status === 'done';
+      allCasesEl.innerHTML += `
+        <li class="task-item">
+          <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleCase(${c.id})">${isDone ? '✓' : ''}</div>
+          <div class="task-content">
+            <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
+            <div class="task-meta">${c.date} ${c.time}</div>
+          </div>
+          <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteCase(${c.id})" title="删除">🗑️</span>
+        </li>`;
+    });
+  }
+}
+
+// ============ CERTIFICATES ============
+function addCert() {
+  const input = document.getElementById('certInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const certs = getData('certs');
+  certs.unshift({
+    id: Date.now(), title: text, status: 'in-progress',
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+  });
+  setData('certs', certs);
+  input.value = '';
+  loadAllData();
+  showToast('已添加', 'success');
+}
+
+function toggleCert(id) {
+  const certs = getData('certs');
+  const c = certs.find(x => x.id === id);
+  if (c) { c.status = c.status === 'done' ? 'in-progress' : 'done'; setData('certs', certs); loadAllData(); }
+}
+
+function deleteCert(id) {
+  if (!confirm('确定要删除吗？')) return;
+  setData('certs', getData('certs').filter(x => x.id !== id));
+  loadAllData();
+}
+
+function renderCerts() {
+  const certs = getData('certs');
+  const inProgress = certs.filter(c => c.status === 'in-progress');
+  document.getElementById('statCertificates').textContent = certs.length + getData('others').length;
+  document.getElementById('certBadge').textContent = inProgress.length;
+  document.getElementById('bizCerts').textContent = certs.length + ' 笔';
+
+  const all = document.getElementById('allCerts');
+  const empty = document.getElementById('emptyAllCerts');
+  all.innerHTML = '';
+  if (certs.length === 0) { empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    certs.forEach(c => {
+      const isDone = c.status === 'done';
+      all.innerHTML += `
+        <li class="task-item">
+          <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleCert(${c.id})">${isDone ? '✓' : ''}</div>
+          <div class="task-content">
+            <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
+            <div class="task-meta">${c.date} ${c.time}</div>
+          </div>
+          <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteCert(${c.id})">🗑️</span>
+        </li>`;
+    });
+  }
+}
+
+// ============ OTHERS ============
+function addOther() {
+  const input = document.getElementById('otherInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const others = getData('others');
+  others.unshift({
+    id: Date.now(), title: text, status: 'in-progress',
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+  });
+  setData('others', others);
+  input.value = '';
+  loadAllData();
+  showToast('已添加', 'success');
+}
+
+function toggleOther(id) {
+  const others = getData('others');
+  const o = others.find(x => x.id === id);
+  if (o) { o.status = o.status === 'done' ? 'in-progress' : 'done'; setData('others', others); loadAllData(); }
+}
+
+function deleteOther(id) {
+  if (!confirm('确定要删除吗？')) return;
+  setData('others', getData('others').filter(x => x.id !== id));
+  loadAllData();
+}
+
+function renderOthers() {
+  const others = getData('others');
+  const inProgress = others.filter(o => o.status === 'in-progress');
+  document.getElementById('otherBadge').textContent = inProgress.length;
+  document.getElementById('bizOthers').textContent = others.length + ' 笔';
+
+  const all = document.getElementById('allOthers');
+  const empty = document.getElementById('emptyAllOthers');
+  all.innerHTML = '';
+  if (others.length === 0) { empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    others.forEach(o => {
+      const isDone = o.status === 'done';
+      all.innerHTML += `
+        <li class="task-item">
+          <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleOther(${o.id})">${isDone ? '✓' : ''}</div>
+          <div class="task-content">
+            <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(o.title)}</div>
+            <div class="task-meta">${o.date} ${o.time}</div>
+          </div>
+          <span class="task-status ${o.status}">${isDone ? '已完成' : '进行中'}</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteOther(${o.id})">🗑️</span>
+        </li>`;
+    });
+  }
+}
+
+// ============ MATERIALS ============
+function renderMaterials() {
+  const materials = getData('materials');
+  const all = document.getElementById('allMaterials');
+  const empty = document.getElementById('emptyAllMaterials');
+  all.innerHTML = '';
+  if (materials.length === 0) { empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    materials.forEach(m => {
+      all.innerHTML += `
+        <li class="task-item">
+          <div class="task-content">
+            <div class="task-title">${escapeHTML(m.title)}</div>
+            <div class="task-meta">${m.type} · ${m.date}</div>
+          </div>
+        </li>`;
+    });
+  }
+}
+
+// ============ REMINDERS ============
+function checkReminders() {
+  const plans = getData('plans');
+  const inProgress = plans.filter(p => p.status === 'in-progress');
+  if (inProgress.length > 0) {
+    const list = document.getElementById('reminderList');
+    list.innerHTML = '';
+    inProgress.slice(0, 5).forEach(p => {
+      list.innerHTML += `<li class="reminder-item">📋 ${escapeHTML(p.title)}</li>`;
+    });
+    document.getElementById('reminderOverlay').classList.add('show');
+  }
+}
+
+function closeReminder() {
+  document.getElementById('reminderOverlay').classList.remove('show');
+}
+
+// ============ UTILS ============
+function loadAllData() {
+  renderPlans();
+  renderMemos();
+  renderCases();
+  renderCerts();
+  renderOthers();
+  renderMaterials();
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showToast(msg, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast ' + (type || '');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+</script>
+
+</body>
+</html>
