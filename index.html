@@ -1231,6 +1231,15 @@ body {
   line-height: 1.45;
 }
 
+/* 录入/编辑时间提示行（所有模块共用） */
+.rec-time {
+  font-size: 11.5px;
+  color: #8aa0b8;
+  margin-top: 5px;
+  line-height: 1.5;
+  letter-spacing: .2px;
+}
+
 /* ===== NOTES / 备忘录 ===== */
 .note-form {
   background: var(--bg-primary);
@@ -2339,6 +2348,7 @@ function addPlan() {
       p.dueDate = dueDate;
       p.dueTime = dueTime;
       p.summary = summary;
+      p.updatedAt = Date.now();
     }
     setData('plans', plans);
     exitPlanEdit();
@@ -2355,6 +2365,8 @@ function addPlan() {
     date: new Date().toISOString().split('T')[0],
     time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
     dueDate, dueTime,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   });
   setData('plans', plans);
   input.value = '';
@@ -2506,6 +2518,7 @@ function planItemHTML(p) {
         <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(p.title)}</div>
         <div class="task-meta">${d} ${p.dueTime || ''}</div>
         ${summaryHtml}
+        ${recTimeHTML(p)}
       </div>
       <span class="task-status ${p.status}">${isDone ? '已完成' : '进行中'}</span>
       <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editPlan(${p.id})" title="编辑">✏️</span>
@@ -2528,7 +2541,7 @@ function addMemo() {
   const tags = tagStr ? tagStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
   if (editingMemoId) {
     const m = memos.find(x => x.id === editingMemoId);
-    if (m) { m.text = text; m.cat = cat; m.tags = tags; }
+    if (m) { m.text = text; m.cat = cat; m.tags = tags; m.updatedAt = Date.now(); }
     setData('memos', memos);
     editingMemoId = null;
     input.value = '';
@@ -2543,6 +2556,8 @@ function addMemo() {
     id: Date.now(), text, cat, tags, organized: false,
     date: new Date().toISOString().split('T')[0],
     time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   });
   setData('memos', memos);
   input.value = '';
@@ -2595,7 +2610,7 @@ function renderMemos() {
       recentMemosEl.innerHTML += `
         <div class="memo-card">
           <div class="memo-text">${escapeHTML(m.text)}</div>
-          <div class="memo-time">${m.date} ${m.time}</div>
+          ${recTimeHTML(m)}
         </div>`;
     });
   }
@@ -2631,7 +2646,7 @@ function renderMemos() {
         ${m.organized ? '<span class="inspo-tag tag-gray" style="margin-left:4px;">✅ 已整理</span>' : `<span style="margin-left:8px;cursor:pointer;font-size:12px;color:var(--accent);" onclick="organizeInspo(${m.id})">📝 整理</span>`}
         <div class="inspo-text">${escapeHTML(m.text)}</div>
         ${tagsHtml}
-        <div class="inspo-time">${m.date} ${m.time}</div>
+        ${recTimeHTML(m)}
       </div>`;
   });
 }
@@ -2708,11 +2723,12 @@ function saveNote() {
       note.content = content;
       note.date = dateStr;
       note.time = timeStr;
+      note.updatedAt = Date.now();
     }
     editingNoteId = null;
     document.getElementById('noteCancelBtn').style.display = 'none';
   } else {
-    notes.unshift({ id: Date.now(), title, content, date: dateStr, time: timeStr });
+    notes.unshift({ id: Date.now(), title, content, date: dateStr, time: timeStr, createdAt: Date.now(), updatedAt: Date.now() });
   }
   setData('notes', notes);
   titleEl.value = '';
@@ -2763,7 +2779,7 @@ function renderNotes() {
         <div class="note-card">
           <div class="note-card-title">${escapeHTML(n.title) || '(无标题)'}</div>
           <div class="note-card-content">${escapeHTML(n.content)}</div>
-          <div class="note-card-time">${n.date} ${n.time}</div>
+          ${recTimeHTML(n)}
           <div class="note-card-actions">
             <span onclick="editNote(${n.id})">✏️ 编辑</span>
             <span class="del" onclick="deleteNote(${n.id})">🗑️ 删除</span>
@@ -2885,6 +2901,7 @@ function renderCases() {
           <div class="task-content" onclick="openCase(${c.id})" style="cursor:pointer;">
             <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
             <div class="task-meta">${escapeHTML(meta)}</div>
+            ${recTimeHTML(c)}
           </div>
           <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
           <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="openCase(${c.id})" title="打开详情">📂</span>
@@ -2906,6 +2923,7 @@ function addCase() {
     date: now.toISOString().split('T')[0],
     time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
     progress: [], review: {},
+    createdAt: Date.now(), updatedAt: Date.now(),
   });
   setData('cases', cases);
   input.value = '';
@@ -2962,7 +2980,7 @@ function caseBasicHTML(c) {
   return `
     <div class="case-meta-row">
       <span class="case-status-badge ${c.status}">${isDone ? '已完结' : '进行中'}</span>
-      <span style="font-size:12px;color:var(--text-secondary);">创建于 ${c.date} ${c.time||''}</span>
+      ${recTimeHTML(c)}
     </div>
     <div class="form-row">
       <div>
@@ -2998,6 +3016,7 @@ function saveCaseBasic() {
   c.type = document.getElementById('caseTypeInput').value;
   c.dueDate = document.getElementById('caseDueInput').value;
   c.notes = document.getElementById('caseNotesInput').value.trim();
+  c.updatedAt = Date.now();
   setData('cases', cases);
   loadAllData();
   renderCalendar();
@@ -3013,6 +3032,7 @@ function closeCase(id) {
   if (!c.dueDate) c.dueDate = formatDate(new Date());
   c.progress = c.progress || [];
   c.progress.push({ id: Date.now(), date: formatDate(new Date()), content: '案件已完结，进入复盘阶段', note: '', isReview: true });
+  c.updatedAt = Date.now();
   setData('cases', cases);
   loadAllData();
   renderCalendar();
@@ -3025,6 +3045,7 @@ function reopenCase(id) {
   const c = cases.find(x => x.id === id);
   if (!c) return;
   c.status = 'in-progress';
+  c.updatedAt = Date.now();
   setData('cases', cases);
   loadAllData();
   renderCalendar();
@@ -3061,6 +3082,7 @@ function caseProgressHTML(c) {
       html += `
         <div class="progress-item ${p.isReview?'review':''}">
           <div class="progress-date">${p.date} ${p.isReview?'· 复盘节点':''}</div>
+          ${recTimeHTML(p)}
           <div class="progress-content">${escapeHTML(p.content)}</div>
           ${p.note?`<div class="progress-note">备注：${escapeHTML(p.note)}</div>`:''}
           <div class="progress-item-actions">
@@ -3086,7 +3108,9 @@ function addCaseProgress(id) {
     date: document.getElementById('progDate').value || formatDate(new Date()),
     content,
     note: document.getElementById('progNote').value.trim(),
+    createdAt: Date.now(),
   });
+  c.updatedAt = Date.now();
   setData('cases', cases);
   loadAllData();
   renderCalendar();
@@ -3103,6 +3127,8 @@ function editCaseProgress(id, pid) {
   if (content === null) return;
   p.content = content.trim();
   p.note = prompt('修改备注（留空删除原备注）：', p.note || '') || '';
+  p.updatedAt = Date.now();
+  c.updatedAt = Date.now();
   setData('cases', cases);
   loadAllData();
   renderCalendar();
@@ -3255,9 +3281,9 @@ function addCert() {
   const text = input.value.trim();
   if (!text) return;
   const certs = getData('certs');
-  if (editingCertId) {
+    if (editingCertId) {
     const c = certs.find(x => x.id === editingCertId);
-    if (c) c.title = text;
+    if (c) { c.title = text; c.updatedAt = Date.now(); }
     setData('certs', certs);
     editingCertId = null;
     input.value = '';
@@ -3273,6 +3299,7 @@ function addCert() {
     id: Date.now(), title: text, status: 'in-progress', dueDate: '',
     date: now.toISOString().split('T')[0],
     time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    createdAt: Date.now(), updatedAt: Date.now(),
   });
   setData('certs', certs);
   input.value = '';
@@ -3332,6 +3359,7 @@ function renderCerts() {
           <div class="task-content">
             <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
             <div class="task-meta">${c.date} ${c.time}${c.dueDate? ' · 截止 '+c.dueDate : ''}</div>
+            ${recTimeHTML(c)}
           </div>
           <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
           <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editCert(${c.id})" title="编辑">✏️</span>
@@ -3350,9 +3378,9 @@ function addOther() {
   const text = input.value.trim();
   if (!text) return;
   const others = getData('others');
-  if (editingOtherId) {
+    if (editingOtherId) {
     const o = others.find(x => x.id === editingOtherId);
-    if (o) o.title = text;
+    if (o) { o.title = text; o.updatedAt = Date.now(); }
     setData('others', others);
     editingOtherId = null;
     input.value = '';
@@ -3368,6 +3396,7 @@ function addOther() {
     id: Date.now(), title: text, status: 'in-progress', dueDate: '',
     date: now.toISOString().split('T')[0],
     time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    createdAt: Date.now(), updatedAt: Date.now(),
   });
   setData('others', others);
   input.value = '';
@@ -3426,6 +3455,7 @@ function renderOthers() {
           <div class="task-content">
             <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(o.title)}</div>
             <div class="task-meta">${o.date} ${o.time}${o.dueDate? ' · 截止 '+o.dueDate : ''}</div>
+            ${recTimeHTML(o)}
           </div>
           <span class="task-status ${o.status}">${isDone ? '已完成' : '进行中'}</span>
           <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editOther(${o.id})" title="编辑">✏️</span>
@@ -3462,10 +3492,11 @@ function renderMaterials() {
     materials.forEach(m => {
       all.innerHTML += `
         <li class="task-item">
-          <div class="task-content">
-            <div class="task-title">${escapeHTML(m.title)}</div>
-            <div class="task-meta">${m.type} · ${m.date}</div>
-          </div>
+            <div class="task-content">
+              <div class="task-title">${escapeHTML(m.title)}</div>
+              <div class="task-meta">${m.type} · ${m.date}</div>
+              ${recTimeHTML(m)}
+            </div>
           <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteMaterial(${m.id})" title="删除">🗑️</span>
         </li>`;
     });
@@ -3490,9 +3521,9 @@ function addTodo() {
   const text = input.value.trim();
   if (!text) return;
   const todos = getData('todos');
-  if (editingTodoId) {
+    if (editingTodoId) {
     const t = todos.find(x => x.id === editingTodoId);
-    if (t) t.text = text;
+    if (t) { t.text = text; t.updatedAt = Date.now(); }
     setData('todos', todos);
     editingTodoId = null;
     input.value = '';
@@ -3502,7 +3533,7 @@ function addTodo() {
     showToast('待办已更新', 'success');
     return;
   }
-  todos.unshift({ id: Date.now(), text, done: false, created: Date.now() });
+  todos.unshift({ id: Date.now(), text, done: false, created: Date.now(), createdAt: Date.now(), updatedAt: Date.now() });
   setData('todos', todos);
   input.value = '';
   loadAllData();
@@ -3557,6 +3588,7 @@ function renderTodos() {
             <div class="todo-check ${isDone ? 'checked' : ''}" onclick="toggleTodo(${t.id})">${isDone ? '✓' : ''}</div>
             <div class="task-content">
               <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(t.text)}</div>
+              ${recTimeHTML(t)}
             </div>
             <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editTodo(${t.id})" title="编辑">✏️</span>
             <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteTodo(${t.id})" title="删除">🗑️</span>
@@ -3726,6 +3758,27 @@ function formatDate(d) {
   const m = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
   return `${y}-${m}-${day}`;
+}
+
+// 统一的「录入/编辑时间」格式化与展示（所有模块共用）
+function fmtTime(ts) {
+  if (!ts) return '';
+  let d;
+  try { d = new Date(ts); } catch (e) { return ''; }
+  if (isNaN(d.getTime())) return '';
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+// 返回一条「录入/编辑时间」提示行；无时间戳时回退到旧 date/time 字段，保证老数据不丢失
+function recTimeHTML(item) {
+  if (!item) return '';
+  const c = item.createdAt ? fmtTime(item.createdAt)
+    : ((item.date || '') + (item.time ? (' ' + item.time) : ''));
+  const u = item.updatedAt ? fmtTime(item.updatedAt) : '';
+  if (!c && !u) return '';
+  if (u && u !== c) return `<div class="rec-time">🕒 录入 ${c} · 编辑 ${u}</div>`;
+  return `<div class="rec-time">🕒 录入 ${c}</div>`;
 }
 
 function prevMonth() {
