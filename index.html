@@ -1937,6 +1937,7 @@ function handleLogin(e) {
     document.getElementById('sidebarName').textContent = user.name;
     loadAllData();
     checkReminders();
+    restorePage();
     showToast('登录成功，欢迎回来！', 'success');
   } else {
     document.getElementById('loginError').style.display = 'block';
@@ -1984,7 +1985,7 @@ const TRASH_ICON = { workplan:'📋', inspiration:'💡', note:'📝', law:'⚖�
 const TRASH_TYPE_LABEL = { workplan:'工作计划', inspiration:'灵感记录', note:'备忘录', law:'律所案件', cert:'证件业务', other:'其他业务', mat:'材料库' };
 
 // ============ INITIALIZATION ============
-(function init() {
+function init() {
   const user = getCurrentUser();
   if (user) {
     document.getElementById('loginPage').classList.add('hidden');
@@ -1995,6 +1996,7 @@ const TRASH_TYPE_LABEL = { workplan:'工作计划', inspiration:'灵感记录', 
     ensureSeedNotes();
     renderNotes();
     setTimeout(checkReminders, 1000);
+    restorePage();
   }
   if (getData('materials').length === 0) {
     setData('materials', [
@@ -2015,11 +2017,13 @@ const TRASH_TYPE_LABEL = { workplan:'工作计划', inspiration:'灵感记录', 
       { id: 15, title: '员工劳动合同模板（老挝语）', type: 'template', date: '2026-08-03' },
     ]);
   }
-})();
+}
 
 // ============ NAVIGATION ============
 function navTo(page, el) {
   if (typeof el === 'string') page = el;
+  // 持久化当前所在页面，刷新后自动恢复（解决"刷新后备忘录不显示"的问题）
+  try { localStorage.setItem(APP_PREFIX + '_active_page', page); } catch(e) {}
   document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (navItem) navItem.classList.add('active');
@@ -2033,6 +2037,14 @@ function navTo(page, el) {
 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('mobile-open');
+}
+
+// 刷新后恢复到上次停留的页面
+function restorePage() {
+  let saved = null;
+  try { saved = localStorage.getItem(APP_PREFIX + '_active_page'); } catch(e) {}
+  const valid = ['dashboard','plans','calendar','memos','notes','todos','cases','certificates','others','materials','trash'];
+  navTo(valid.includes(saved) ? saved : 'dashboard');
 }
 
 document.addEventListener('click', function(e) {
@@ -3654,6 +3666,9 @@ function showToast(msg, type) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
+
+// 在所有 const / 函数声明之后执行初始化（避免 SEED_NOTES 等 const 的暂时性死区报错）
+init();
 </script>
 
 </body>
