@@ -1993,6 +1993,7 @@ const TRASH_TYPE_LABEL = { workplan:'工作计划', inspiration:'灵感记录', 
     document.getElementById('sidebarName').textContent = user.name || '管理员';
     loadAllData();
     ensureSeedNotes();
+    renderNotes();
     setTimeout(checkReminders, 1000);
   }
   if (getData('materials').length === 0) {
@@ -2527,6 +2528,37 @@ function ensureSeedNotes() {
 
 // ============ CASES ============
 let currentCaseId = null;
+
+function renderCases() {
+  const cases = getData('cases');
+  const inProgress = cases.filter(c => c.status === 'in-progress');
+  document.getElementById('statCases').textContent = cases.length;
+  document.getElementById('caseBadge').textContent = inProgress.length;
+  document.getElementById('bizCases').textContent = cases.length + ' 个案件';
+
+  const allCasesEl = document.getElementById('allCases');
+  const emptyEl = document.getElementById('emptyAllCases');
+  allCasesEl.innerHTML = '';
+  if (cases.length === 0) { emptyEl.style.display = 'block'; }
+  else {
+    emptyEl.style.display = 'none';
+    cases.forEach(c => {
+      const isDone = c.status === 'done';
+      const meta = [c.date, c.time, c.type, c.client, c.dueDate ? ('截止 ' + c.dueDate) : ''].filter(Boolean).join(' · ');
+      allCasesEl.innerHTML += `
+        <li class="task-item">
+          <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleCase(${c.id})">${isDone ? '✓' : ''}</div>
+          <div class="task-content" onclick="openCase(${c.id})" style="cursor:pointer;">
+            <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
+            <div class="task-meta">${escapeHTML(meta)}</div>
+          </div>
+          <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="openCase(${c.id})" title="打开详情">📂</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteCase(${c.id})" title="删除">🗑️</span>
+        </li>`;
+    });
+  }
+}
 
 function addCase() {
   const input = document.getElementById('caseInput');
@@ -3595,6 +3627,7 @@ function closeReminder() {
 
 // ============ UTILS ============
 function loadAllData() {
+  ensureSeedNotes();
   renderPlans();
   renderMemos();
   renderNotes();
@@ -3605,6 +3638,7 @@ function loadAllData() {
   renderTodos();
   renderTrash();
   updateTrashBadge();
+  renderCalendar();
 }
 
 function escapeHTML(str) {
