@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>象邦工作台 - 登录</title>
+<title>wenhao的工作台 - 登录</title>
 <style>
 :root {
   --bg-primary: #f7f5f0;
@@ -615,10 +615,12 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
-.quick-add input {
+.quick-add input, .quick-add textarea, .quick-add select {
   flex: 1;
+  min-width: 140px;
   padding: 10px 14px;
   border: 2px solid var(--border);
   border-radius: var(--radius-sm);
@@ -626,9 +628,10 @@ body {
   outline: none;
   background: var(--bg-primary);
   transition: all 0.2s;
+  font-family: inherit;
 }
 
-.quick-add input:focus {
+.quick-add input:focus, .quick-add textarea:focus, .quick-add select:focus {
   border-color: var(--accent);
   background: #fff;
 }
@@ -733,6 +736,396 @@ body {
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
 
+/* ===== CALENDAR ===== */
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.cal-nav-btn {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  font-size: 18px;
+  cursor: pointer;
+  color: #0f2b46;
+  transition: all 0.2s;
+}
+
+.cal-nav-btn:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.cal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f2b46;
+  min-width: 140px;
+  text-align: center;
+}
+
+.cal-today-btn {
+  padding: 8px 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.cal-today-btn:hover { background: var(--accent-hover); }
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-weight: 600;
+  padding: 10px 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+}
+
+.cal-cell {
+  min-height: 96px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.cal-cell:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.cal-cell.today {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.cal-cell.selected {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.cal-cell.other-month {
+  opacity: 0.38;
+  background: #faf9f6;
+}
+
+.cal-daynum {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cal-cell.today .cal-daynum {
+  color: var(--accent-hover);
+}
+
+.cal-event {
+  font-size: 11px;
+  background: var(--accent-light);
+  color: #8a6d1f;
+  border-radius: 4px;
+  padding: 2px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.cal-event.done {
+  background: #e8f5e9;
+  color: #1e7e34;
+  text-decoration: line-through;
+}
+
+.cal-event .ev-time {
+  font-weight: 700;
+  margin-right: 3px;
+}
+
+.cal-more {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding-left: 5px;
+}
+
+/* Calendar Detail Panel */
+.cal-detail {
+  margin-top: 20px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.cal-detail-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f2b46;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-add-form {
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.cal-add-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.cal-add-row input {
+  flex: 1;
+  min-width: 120px;
+  padding: 9px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  font-family: inherit;
+}
+
+.cal-add-row input:focus {
+  border-color: var(--accent);
+}
+
+.cal-add-row .matter-input {
+  flex: 2;
+  min-width: 200px;
+}
+
+.cal-add-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cal-add-btn:hover { background: var(--accent-hover); }
+
+.cal-day-plans {
+  list-style: none;
+}
+
+.cal-day-plan {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.cal-day-plan:hover {
+  background: var(--bg-primary);
+}
+
+.cal-plan-time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-hover);
+  min-width: 48px;
+}
+
+.cal-plan-time.empty {
+  color: #bbb;
+}
+
+.cal-plan-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cal-plan-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cal-plan-title.done {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.cal-plan-status {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.cal-plan-status.in-progress {
+  background: #fff3e0;
+  color: #e67e22;
+}
+
+.cal-plan-status.done {
+  background: #e8f5e9;
+  color: var(--success);
+}
+
+.cal-plan-del {
+  cursor: pointer;
+  color: #ccc;
+  font-size: 16px;
+  padding: 4px;
+}
+
+.cal-plan-del:hover { color: var(--danger); }
+
+/* ===== NOTES / 备忘录 ===== */
+.note-form {
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.note-form input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+
+.note-form input:focus { border-color: var(--accent); }
+
+.note-form textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  margin-bottom: 10px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.note-form textarea:focus { border-color: var(--accent); }
+
+.note-form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.note-form-actions button {
+  padding: 9px 22px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.note-save-btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+.note-save-btn:hover { background: var(--accent-hover); }
+
+.note-cancel-btn {
+  background: #eee;
+  color: #666;
+}
+
+.note-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--accent);
+  transition: all 0.2s;
+}
+
+.note-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.note-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2b46;
+}
+
+.note-card-content {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-top: 8px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.note-card-time {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 10px;
+}
+
+.note-card-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 14px;
+}
+
+.note-card-actions span {
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.note-card-actions span:hover { color: var(--accent-hover); }
+
+.note-card-actions .del { color: var(--danger); }
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
@@ -757,6 +1150,17 @@ body {
   .mobile-menu-btn {
     display: block !important;
   }
+  .calendar-grid {
+    gap: 3px;
+  }
+  .cal-cell {
+    min-height: 70px;
+    padding: 4px;
+  }
+  .cal-event {
+    font-size: 10px;
+    padding: 1px 3px;
+  }
 }
 
 .mobile-menu-btn {
@@ -774,6 +1178,297 @@ body {
   font-size: 20px;
   cursor: pointer;
 }
+
+/* ===== Calendar event type colors (fix: 显示不完整) ===== */
+.cal-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.cal-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.cal-legend i {
+  width: 10px; height: 10px; border-radius: 3px; display: inline-block;
+}
+.cal-event.type-plan { background: var(--accent-light); color: #8a6d1f; }
+.cal-event.type-case { background: #fdeaea; color: #c0392b; }
+.cal-event.type-cert { background: #fff3e0; color: #e67e22; }
+.cal-event.type-other { background: #e8f4fd; color: #2980b9; }
+
+.cal-day-plans .cal-plan-type {
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+.cal-plan-type.type-plan { background: var(--accent-light); color: #8a6d1f; }
+.cal-plan-type.type-case { background: #fdeaea; color: #c0392b; }
+.cal-plan-type.type-cert { background: #fff3e0; color: #e67e22; }
+.cal-plan-type.type-other { background: #e8f4fd; color: #2980b9; }
+
+/* ===== List inline edit ===== */
+.task-item.editing { background: var(--accent-light); }
+.task-edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  font-family: inherit;
+}
+.memo-card.editing { background: var(--accent-light); }
+
+/* ===== MODAL (case detail) ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15,43,70,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.modal-title { font-size: 18px; font-weight: 700; color: #0f2b46; }
+.modal-close {
+  width: 34px; height: 34px;
+  border: none; background: none;
+  font-size: 24px; cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: 8px;
+}
+.modal-close:hover { background: var(--bg-primary); }
+.modal-body { padding: 22px 24px; overflow-y: auto; }
+
+.case-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.case-modal-tab {
+  padding: 13px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.case-modal-tab:hover { color: var(--accent); }
+.case-modal-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+.case-meta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.case-status-badge {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.case-status-badge.in-progress { background: #fff3e0; color: #e67e22; }
+.case-status-badge.done { background: #e8f5e9; color: var(--success); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal .form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  margin-top: 14px;
+}
+.modal .form-control {
+  width: 100%;
+  padding: 9px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: var(--bg-primary);
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.modal .form-control:focus { border-color: var(--accent); background: #fff; }
+.modal textarea.form-control { resize: vertical; min-height: 80px; }
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-ghost { background: #eee; color: #555; }
+.btn-ghost:hover { background: #e0e0e0; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { background: #1e8449; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #c0392b; }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+
+/* progress timeline */
+.progress-add {
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 18px;
+}
+.progress-timeline { position: relative; padding-left: 22px; }
+.progress-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 4px; bottom: 4px;
+  width: 2px;
+  background: var(--border);
+}
+.progress-item {
+  position: relative;
+  margin-bottom: 16px;
+}
+.progress-item::before {
+  content: '';
+  position: absolute;
+  left: -19px; top: 5px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  z-index: 1;
+}
+.progress-item.review::before { background: var(--purple, #8b5cf6); }
+.progress-date { font-size: 12px; color: var(--text-secondary); margin-bottom: 3px; }
+.progress-content {
+  background: var(--bg-primary);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.6;
+  border-left: 3px solid var(--accent);
+}
+.progress-note {
+  font-size: 12px; color: var(--text-secondary);
+  margin-top: 6px; padding-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+.progress-item-actions { margin-top: 6px; display: flex; gap: 12px; }
+.progress-item-actions span { font-size: 12px; color: var(--accent); cursor: pointer; font-weight: 600; }
+.progress-item-actions .del { color: var(--danger); }
+
+/* review section */
+.review-locked {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--text-secondary);
+}
+.review-locked-icon { font-size: 36px; margin-bottom: 10px; }
+.review-locked-text { font-size: 15px; margin-bottom: 6px; font-weight: 600; color: var(--text-primary); }
+.review-section {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  border: 1px solid var(--purple-light, #ede9fe);
+  margin-top: 6px;
+}
+.review-section .form-label { color: #5b21b6; }
+.ai-summary-box {
+  margin-top: 18px;
+  background: #fff;
+  border: 2px dashed var(--purple, #8b5cf6);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+}
+.ai-summary-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.ai-summary-title { font-size: 14px; font-weight: 700; color: var(--purple, #7c3aed); }
+.ai-summary-content {
+  font-size: 13px; line-height: 1.8; color: var(--text-primary);
+  white-space: pre-wrap;
+  max-height: 320px; overflow-y: auto;
+}
+.ai-summary-loading { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 13px; }
+.ai-summary-loading .spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--purple-light, #ede9fe);
+  border-top-color: var(--purple, #8b5cf6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== 待办事项 / 灵感增强 / 垃圾箱 ===== */
+.todo-item { display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:8px; }
+.todo-check { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; flex-shrink:0; color:#fff; }
+.todo-check.checked { background:var(--success); border-color:var(--success); }
+.todo-text { flex:1; font-size:14px; }
+.todo-item.done .todo-text { text-decoration:line-through; color:var(--text-secondary); }
+.todo-edit, .todo-del { cursor:pointer; color:var(--text-secondary); font-size:13px; }
+.todo-edit:hover, .todo-del:hover { color:var(--danger); }
+.sub-block-title { font-size:14px; font-weight:700; margin:18px 0 10px; color:var(--text-primary); display:flex; align-items:center; gap:6px; }
+
+.inspo-controls { display:flex; justify-content:space-between; align-items:center; margin:6px 0 12px; flex-wrap:wrap; gap:8px; }
+.inspo-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.inspo-tab { padding:5px 12px; border-radius:20px; background:var(--bg-card); border:1px solid var(--border); cursor:pointer; font-size:13px; color:var(--text-secondary); }
+.inspo-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+.inspo-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; position:relative; }
+.inspo-text { font-size:14px; line-height:1.5; margin-top:6px; }
+.inspo-time { font-size:11px; color:var(--text-secondary); margin-top:6px; }
+.inspo-edit, .inspo-del { position:absolute; top:8px; cursor:pointer; font-size:13px; color:var(--text-secondary); }
+.inspo-edit { right:32px; } .inspo-del { right:10px; }
+.inspo-edit:hover, .inspo-del:hover { color:var(--danger); }
+.inspo-tag { display:inline-block; padding:2px 9px; border-radius:10px; font-size:11px; font-weight:600; }
+.tag-blue { background:#e6f0fb; color:#2b6cb0; }
+.tag-gray { background:#f0f0f0; color:var(--text-secondary); padding:2px 8px; border-radius:10px; font-size:10px; }
+
+.trash-item { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:8px; }
+.trash-info { flex:1; min-width:0; }
+.trash-title { font-weight:500; font-size:14px; }
+.trash-meta { font-size:12px; color:var(--text-secondary); margin-top:2px; }
+.trash-actions { display:flex; gap:6px; flex-shrink:0; }
+.btn-sm { padding:4px 10px; font-size:12px; border-radius:6px; border:none; cursor:pointer; }
+.btn-restore { background:var(--success); color:#fff; }
+.btn-purge { background:#f0f0f0; color:var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -783,7 +1478,7 @@ body {
   <div class="login-container">
     <div class="login-header">
       <div class="login-logo">🛡️</div>
-      <div class="login-title">象邦工作台</div>
+      <div class="login-title">wenhao的工作台</div>
       <div class="login-subtitle">Chanbang Workbench</div>
     </div>
     <form id="loginForm" onsubmit="return handleLogin(event)">
@@ -798,7 +1493,7 @@ body {
       <button type="submit" class="login-btn">登 录</button>
       <div class="login-error" id="loginError">用户名或密码错误</div>
     </form>
-    <div class="login-footer">&copy; 2026 象邦 · Chanbang. All rights reserved.</div>
+    <div class="login-footer">&copy; 2026 wenhao · Wenhao Workbench. All rights reserved.</div>
   </div>
 </div>
 
@@ -811,7 +1506,7 @@ body {
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">🛡️</div>
-      <div class="sidebar-title">象邦工作台</div>
+      <div class="sidebar-title">wenhao的工作台</div>
     </div>
     <div class="sidebar-nav">
       <a class="nav-item active" onclick="navTo('dashboard', this)" data-page="dashboard">
@@ -821,9 +1516,20 @@ body {
         <span class="nav-icon">📋</span> 工作计划
         <span class="nav-badge" id="planBadge">0</span>
       </a>
+      <a class="nav-item" onclick="navTo('calendar', this)" data-page="calendar">
+        <span class="nav-icon">📅</span> 日历
+      </a>
       <a class="nav-item" onclick="navTo('memos', this)" data-page="memos">
         <span class="nav-icon">💡</span> 灵感记录
         <span class="nav-badge" id="memoBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('notes', this)" data-page="notes">
+        <span class="nav-icon">📝</span> 备忘录
+        <span class="nav-badge" id="notesBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="navTo('todos', this)" data-page="todos">
+        <span class="nav-icon">✅</span> 待办事项
+        <span class="nav-badge" id="todoBadge">0</span>
       </a>
       <a class="nav-item" onclick="navTo('cases', this)" data-page="cases">
         <span class="nav-icon">⚖️</span> 律所案件
@@ -840,13 +1546,17 @@ body {
       <a class="nav-item" onclick="navTo('materials', this)" data-page="materials">
         <span class="nav-icon">📚</span> 业务材料库
       </a>
+      <a class="nav-item" onclick="navTo('trash', this)" data-page="trash">
+        <span class="nav-icon">🗑️</span> 垃圾箱
+        <span class="nav-badge" id="trashBadge" style="display:none;">0</span>
+      </a>
     </div>
     <div class="sidebar-footer">
       <div class="user-info">
         <div class="user-avatar" id="sidebarAvatar">管</div>
         <div>
           <div class="user-name" id="sidebarName">管理员</div>
-          <div class="user-role">象邦工作台</div>
+          <div class="user-role">wenhao的工作台</div>
         </div>
         <button class="logout-btn" onclick="handleLogout()" title="退出登录">🚪</button>
       </div>
@@ -892,8 +1602,15 @@ body {
             <div class="stat-label">灵感记录</div>
           </div>
         </div>
+        <div class="stat-card" onclick="navTo('notes')">
+          <div class="stat-icon gold">📝</div>
+          <div>
+            <div class="stat-value" id="statNotes">0</div>
+            <div class="stat-label">备忘录</div>
+          </div>
+        </div>
         <div class="stat-card" onclick="navTo('cases')">
-          <div class="stat-icon gold">⚖��</div>
+          <div class="stat-icon gold">⚖️</div>
           <div>
             <div class="stat-value" id="statCases">0</div>
             <div class="stat-label">律所案件</div>
@@ -966,7 +1683,7 @@ body {
     <section class="page-section" id="page-plans">
       <div class="page-header">
         <div class="page-title">工作计划</div>
-        <div class="page-subtitle">管理你的所有工作安排与任务</div>
+        <div class="page-subtitle">管理你的所有工作安排与任务（也可在「日历」中按日期添加）</div>
       </div>
       <div class="quick-add">
         <input type="text" id="planInput" placeholder="添加新计划... 例：完成老挝土地投资可行性报告" onkeydown="if(event.key==='Enter')addPlan()">
@@ -981,6 +1698,22 @@ body {
       </div>
     </section>
 
+    <!-- Calendar Page -->
+    <section class="page-section" id="page-calendar">
+      <div class="page-header">
+        <div class="page-title">📅 日历</div>
+        <div class="page-subtitle">所有工作计划按日期、时间、摘要展示；点击日期可添加提醒</div>
+      </div>
+      <div class="calendar-toolbar">
+        <button class="cal-nav-btn" onclick="prevMonth()">‹</button>
+        <span class="cal-title" id="calendarTitle">2026年8月</span>
+        <button class="cal-nav-btn" onclick="nextMonth()">›</button>
+        <button class="cal-today-btn" onclick="goToday()">今天</button>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="cal-detail" id="calDetail"></div>
+    </section>
+
     <!-- Memos Page -->
     <section class="page-section" id="page-memos">
       <div class="page-header">
@@ -989,12 +1722,70 @@ body {
       </div>
       <div class="quick-add">
         <input type="text" id="memoInput" placeholder="记录灵感... 例：可以考虑在老挝注册合资公司来享受税收优惠" onkeydown="if(event.key==='Enter')addMemo()">
+        <select id="memoCat" style="max-width:130px;">
+          <option value="auto">🤖 自动分类</option>
+          <option value="work">💼 工作</option>
+          <option value="idea">💡 创意</option>
+          <option value="learn">📚 学习</option>
+          <option value="life">🌿 生活</option>
+          <option value="misc">✍️ 随笔</option>
+        </select>
         <button onclick="addMemo()">+ 记录</button>
       </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <input type="text" id="memoTags" placeholder="标签（选填，逗号分隔）" style="flex:1;min-width:150px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;">
+        <input type="text" id="memoSearch" placeholder="🔍 搜索灵感..." oninput="renderMemos()" style="flex:1;min-width:150px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;">
+        <button onclick="organizeAllInspo('all')" title="将未整理的灵感合并为一条备忘录" style="padding:8px 14px;border:none;background:var(--success);color:#fff;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;">📝 整理为备忘录</button>
+      </div>
+      <div class="inspo-tabs" id="memoTabs"></div>
       <div id="allMemos"></div>
       <div class="empty-state" id="emptyAllMemos">
         <div class="empty-icon">💡</div>
         <div class="empty-text">还没有灵感记录，开始记录吧</div>
+      </div>
+    </section>
+
+    <!-- Notes / 备忘录 Page -->
+    <section class="page-section" id="page-notes">
+      <div class="page-header">
+        <div class="page-title">📝 备忘录</div>
+        <div class="page-subtitle">记录重要事项与笔记，自动保存</div>
+      </div>
+      <div class="note-form">
+        <input type="text" id="noteTitleInput" placeholder="备忘录标题...">
+        <textarea id="noteContentInput" placeholder="输入内容..."></textarea>
+        <div class="note-form-actions">
+          <button class="note-save-btn" onclick="saveNote()">保存备忘录</button>
+          <button class="note-cancel-btn" id="noteCancelBtn" onclick="cancelNoteEdit()" style="display:none;">取消编辑</button>
+        </div>
+      </div>
+      <div id="allNotes"></div>
+      <div class="empty-state" id="emptyAllNotes">
+        <div class="empty-icon">📝</div>
+        <div class="empty-text">还没有备忘录，写下第一条吧</div>
+      </div>
+    </section>
+
+    <!-- 待办事项 Page -->
+    <section class="page-section" id="page-todos">
+      <div class="page-header">
+        <div class="page-title">待办事项</div>
+        <div class="page-subtitle">独立临时待办 + 工作计划自动同步；勾选待办会同步完成对应计划</div>
+      </div>
+      <div class="quick-add">
+        <input type="text" id="todoInput" placeholder="添加临时待办... 例：给客户回电话确认会议时间" onkeydown="if(event.key==='Enter')addTodo()">
+        <button onclick="addTodo()">+ 添加待办</button>
+      </div>
+      <div class="dashboard-section">
+        <ul class="task-list" id="allTodos"></ul>
+        <div class="empty-state" id="emptyAllTodos">
+          <div class="empty-icon">✅</div>
+          <div class="empty-text">暂无临时待办</div>
+        </div>
+      </div>
+      <div class="dashboard-section">
+        <div class="sub-block-title">📋 工作计划（自动同步）</div>
+        <ul class="task-list" id="todoPlans"></ul>
       </div>
     </section>
 
@@ -1040,7 +1831,7 @@ body {
     <section class="page-section" id="page-others">
       <div class="page-header">
         <div class="page-title">其他业务</div>
-        <div class="page-subtitle">���理其他各类业务</div>
+        <div class="page-subtitle">管理其他各类业务</div>
       </div>
       <div class="quick-add">
         <input type="text" id="otherInput" placeholder="添加其他业务..." onkeydown="if(event.key==='Enter')addOther()">
@@ -1069,7 +1860,32 @@ body {
         </div>
       </div>
     </section>
+
+    <!-- 垃圾箱 Page -->
+    <section class="page-section" id="page-trash">
+      <div class="page-header">
+        <div class="page-title">🗑 垃圾箱</div>
+        <div class="page-subtitle">误删的内容暂存在这里，可一键恢复回原板块，或永久删除</div>
+      </div>
+      <div id="trashContainer"></div>
+    </section>
   </main>
+</div>
+
+<!-- ===== CASE DETAIL MODAL ===== -->
+<div class="modal-overlay" id="caseModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="caseModalTitle">案件详情</div>
+      <button class="modal-close" onclick="closeCaseModal()">×</button>
+    </div>
+    <div class="case-modal-tabs">
+      <div class="case-modal-tab active" data-tab="basic" onclick="switchCaseTab('basic')">基本信息</div>
+      <div class="case-modal-tab" data-tab="progress" onclick="switchCaseTab('progress')">进展记录</div>
+      <div class="case-modal-tab" data-tab="review" onclick="switchCaseTab('review')">案件复盘</div>
+    </div>
+    <div class="modal-body" id="caseModalBody"></div>
+  </div>
 </div>
 
 <!-- Reminder Popup -->
@@ -1147,20 +1963,38 @@ function setData(key, data) {
   localStorage.setItem(APP_PREFIX + '_' + key, JSON.stringify(data));
 }
 
+// ============ SHARED CONSTANTS（分类 / 工具） ============
+const CAT_LABELS = { work:'💼 工作', idea:'💡 创意', learn:'📚 学习', life:'🌿 生活', misc:'✍️ 随笔' };
+const CAT_COLORS = {
+  work: 'background:#eaf2ff;color:#2b6cb0;',
+  idea: 'background:#f3e8ff;color:#7c3aed;',
+  learn:'background:#e6f7ed;color:#1f9254;',
+  life: 'background:#fff4e0;color:#b7791f;',
+  misc: 'background:#f0f0f0;color:#666;'
+};
+const CAT_KW = {
+  work:['会议','项目','任务','客户','报告','方案','计划','工作','开发','测试','上线','部署','需求','排期','对接','代码','接口','数据库','小程序','后端','前端','服务器','域名'],
+  idea:['想法','灵感','创意','设计','点子','如果','也许','可以尝试','不如','突然想到','脑洞','概念','产品','功能'],
+  learn:['学习','读书','课程','知识','理解','研究','教程','文档','原理','算法','技术','框架','语言','练习','复习','笔记'],
+  life:['生活','旅行','美食','健康','运动','家','周末','放假','休息','电影','音乐','购物','朋友','聚会','早起','跑步']
+};
+function autoCat(text){ const l=(text||'').toLowerCase(); let best='misc', bs=0; for(const [cat,words] of Object.entries(CAT_KW)){ let s=0; for(const w of words){ if(l.includes(w.toLowerCase())) s++; } if(s>bs){ bs=s; best=cat; } } return best; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+const TRASH_ICON = { workplan:'📋', inspiration:'💡', note:'📝', law:'⚖️', cert:'📄', other:'📁', mat:'📋' };
+const TRASH_TYPE_LABEL = { workplan:'工作计划', inspiration:'灵感记录', note:'备忘录', law:'律所案件', cert:'证件业务', other:'其他业务', mat:'材料库' };
+
 // ============ INITIALIZATION ============
 (function init() {
   const user = getCurrentUser();
   if (user) {
-    // Already logged in
     document.getElementById('loginPage').classList.add('hidden');
     document.getElementById('workbench').classList.add('active');
     document.getElementById('sidebarAvatar').textContent = user.initial || '管';
     document.getElementById('sidebarName').textContent = user.name || '管理员';
     loadAllData();
-    // Check reminders after a short delay
+    ensureSeedNotes();
     setTimeout(checkReminders, 1000);
   }
-  // Initialize materials if empty
   if (getData('materials').length === 0) {
     setData('materials', [
       { id: 1, title: '投资协议模板（中老双语）', type: 'template', date: '2026-07-15' },
@@ -1184,25 +2018,15 @@ function setData(key, data) {
 
 // ============ NAVIGATION ============
 function navTo(page, el) {
-  if (typeof el === 'string') {
-    // Called from dashboard stat cards
-    page = el;
-  }
-
-  // Update nav active state
+  if (typeof el === 'string') page = el;
   document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (navItem) navItem.classList.add('active');
-
-  // Show page
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
   const pageSection = document.getElementById('page-' + page);
   if (pageSection) pageSection.classList.add('active');
-
-  // Refresh data
   loadAllData();
-
-  // Close mobile sidebar
+  if (page === 'calendar') renderCalendar();
   document.getElementById('sidebar').classList.remove('mobile-open');
 }
 
@@ -1210,7 +2034,6 @@ function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('mobile-open');
 }
 
-// Click outside sidebar to close on mobile
 document.addEventListener('click', function(e) {
   const sidebar = document.getElementById('sidebar');
   if (sidebar.classList.contains('mobile-open') && !sidebar.contains(e.target) && !e.target.classList.contains('mobile-menu-btn')) {
@@ -1218,25 +2041,63 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// 点击遮罩关闭弹窗（案件详情）
+document.addEventListener('click', function(e) {
+  const overlay = e.target.closest('.modal-overlay');
+  if (overlay && !e.target.closest('.modal') && !e.target.closest('.modal-close')) {
+    overlay.classList.remove('show');
+    currentCaseId = null;
+  }
+});
+
 // ============ PLANS ============
+let editingPlanId = null;
+
 function addPlan() {
   const input = document.getElementById('planInput');
   const text = input.value.trim();
   if (!text) return;
-
+  const now = new Date();
   const plans = getData('plans');
-  const newPlan = {
+  if (editingPlanId) {
+    const p = plans.find(x => x.id === editingPlanId);
+    if (p) p.title = text;
+    setData('plans', plans);
+    editingPlanId = null;
+    input.value = '';
+    const btn = document.querySelector('#page-plans .quick-add button');
+    if (btn) btn.textContent = '+ 添加计划';
+    loadAllData();
+    renderCalendar();
+    showToast('计划已更新', 'success');
+    return;
+  }
+  plans.unshift({
     id: Date.now(),
     title: text,
-    status: 'in-progress', // in-progress, done
-    date: new Date().toISOString().split('T')[0],
-    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-  };
-  plans.unshift(newPlan);
+    status: 'in-progress',
+    date: now.toISOString().split('T')[0],
+    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    dueDate: now.toISOString().split('T')[0],
+    dueTime: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+  });
   setData('plans', plans);
   input.value = '';
   loadAllData();
+  renderCalendar();
   showToast('计划已添加', 'success');
+}
+
+function editPlan(id) {
+  const p = getData('plans').find(x => x.id === id);
+  if (!p) return;
+  editingPlanId = id;
+  const input = document.getElementById('planInput');
+  input.value = p.title;
+  input.focus();
+  const btn = document.querySelector('#page-plans .quick-add button');
+  if (btn) btn.textContent = '✓ 更新计划';
+  document.getElementById('page-plans').scrollIntoView({ behavior: 'smooth' });
 }
 
 function togglePlan(id) {
@@ -1246,29 +2107,34 @@ function togglePlan(id) {
     plan.status = plan.status === 'done' ? 'in-progress' : 'done';
     setData('plans', plans);
     loadAllData();
+    renderCalendar();
   }
 }
 
 function deletePlan(id) {
-  if (!confirm('确定要删除这个计划��？')) return;
-  let plans = getData('plans');
-  plans = plans.filter(p => p.id !== id);
-  setData('plans', plans);
+  const p = getData('plans').find(x => x.id === id);
+  if (!p) return;
+  if (!confirm('确定要删除这个计划吗？（可到「垃圾箱」恢复）')) return;
+  if (editingPlanId === id) { editingPlanId = null; const btn = document.querySelector('#page-plans .quick-add button'); if (btn) btn.textContent = '+ 添加计划'; }
+  moveToTrash('workplan', '工作计划', p);
+  setData('plans', getData('plans').filter(x => x.id !== id));
   loadAllData();
+  renderCalendar();
+  updateTrashBadge();
 }
+
+function planDate(p) { return p.dueDate || p.date; }
 
 function renderPlans() {
   const plans = getData('plans');
   const inProgress = plans.filter(p => p.status === 'in-progress');
   const done = plans.filter(p => p.status === 'done');
 
-  // Stats
   document.getElementById('statPlansInProgress').textContent = inProgress.length;
   document.getElementById('statPlansDone').textContent = done.length;
   document.getElementById('statPlansOverdue').textContent = '0';
   document.getElementById('planBadge').textContent = inProgress.length;
 
-  // Recent plans (dashboard)
   const recentPlansEl = document.getElementById('recentPlans');
   const emptyPlansEl = document.getElementById('emptyPlans');
   recentPlansEl.innerHTML = '';
@@ -1277,12 +2143,9 @@ function renderPlans() {
     emptyPlansEl.style.display = 'block';
   } else {
     emptyPlansEl.style.display = 'none';
-    recent.forEach(p => {
-      recentPlansEl.innerHTML += planItemHTML(p);
-    });
+    recent.forEach(p => recentPlansEl.innerHTML += planItemHTML(p));
   }
 
-  // All plans
   const allPlansEl = document.getElementById('allPlans');
   const emptyAllPlansEl = document.getElementById('emptyAllPlans');
   allPlansEl.innerHTML = '';
@@ -1293,61 +2156,99 @@ function renderPlans() {
     const sorted = [...plans].sort((a, b) => {
       if (a.status === 'done' && b.status !== 'done') return 1;
       if (a.status !== 'done' && b.status === 'done') return -1;
-      return b.id - a.id;
+      return (b.dueDate || b.date) < (a.dueDate || a.date) ? -1 : 1;
     });
-    sorted.forEach(p => {
-      allPlansEl.innerHTML += planItemHTML(p);
-    });
+    sorted.forEach(p => allPlansEl.innerHTML += planItemHTML(p));
   }
 }
 
 function planItemHTML(p) {
   const isDone = p.status === 'done';
+  const d = planDate(p);
   return `
     <li class="task-item">
       <div class="task-check ${isDone ? 'done' : ''}" onclick="togglePlan(${p.id})">${isDone ? '✓' : ''}</div>
       <div class="task-content">
         <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(p.title)}</div>
-        <div class="task-meta">${p.date} ${p.time || ''}</div>
+        <div class="task-meta">${d} ${p.dueTime || ''}</div>
       </div>
       <span class="task-status ${p.status}">${isDone ? '已完成' : '进行中'}</span>
+      <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editPlan(${p.id})" title="编辑">✏️</span>
       <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deletePlan(${p.id})" title="删除">🗑️</span>
     </li>`;
 }
 
-// ============ MEMOS ============
+// ============ MEMOS (灵感记录) · 增强版 ============
+let editingMemoId = null;
+let memoFilter = 'all';
+
 function addMemo() {
   const input = document.getElementById('memoInput');
   const text = input.value.trim();
   if (!text) return;
-
   const memos = getData('memos');
+  const catSel = document.getElementById('memoCat');
+  const cat = (catSel && catSel.value !== 'auto') ? catSel.value : autoCat(text);
+  const tagStr = document.getElementById('memoTags').value.trim();
+  const tags = tagStr ? tagStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+  if (editingMemoId) {
+    const m = memos.find(x => x.id === editingMemoId);
+    if (m) { m.text = text; m.cat = cat; m.tags = tags; }
+    setData('memos', memos);
+    editingMemoId = null;
+    input.value = '';
+    document.getElementById('memoTags').value = '';
+    const btn = document.querySelector('#page-memos .quick-add button');
+    if (btn) btn.textContent = '+ 记录';
+    loadAllData();
+    showToast('灵感已更新', 'success');
+    return;
+  }
   memos.unshift({
-    id: Date.now(),
-    text,
+    id: Date.now(), text, cat, tags, organized: false,
     date: new Date().toISOString().split('T')[0],
     time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
   });
   setData('memos', memos);
   input.value = '';
+  document.getElementById('memoTags').value = '';
+  if (catSel) catSel.value = 'auto';
   loadAllData();
-  showToast('灵感已记录', 'success');
+  showToast('灵感已记录 · 归入「' + CAT_LABELS[cat] + '」', 'success');
+}
+
+function editMemo(id) {
+  const m = getData('memos').find(x => x.id === id);
+  if (!m) return;
+  editingMemoId = id;
+  document.getElementById('memoInput').value = m.text;
+  document.getElementById('memoTags').value = (m.tags || []).join(', ');
+  const catSel = document.getElementById('memoCat');
+  if (catSel) catSel.value = m.cat || 'misc';
+  document.getElementById('memoInput').focus();
+  const btn = document.querySelector('#page-memos .quick-add button');
+  if (btn) btn.textContent = '✓ 更新灵感';
+  document.getElementById('page-memos').scrollIntoView({ behavior: 'smooth' });
 }
 
 function deleteMemo(id) {
-  if (!confirm('确定要删除这条记录吗？')) return;
-  let memos = getData('memos');
-  memos = memos.filter(m => m.id !== id);
-  setData('memos', memos);
+  const m = getData('memos').find(x => x.id === id);
+  if (!m) return;
+  if (!confirm('确定要删除这条灵感记录吗？')) return;
+  if (editingMemoId === id) { editingMemoId = null; const btn = document.querySelector('#page-memos .quick-add button'); if (btn) btn.textContent = '+ 记录'; }
+  moveToTrash('inspiration', '灵感记录', m);
+  setData('memos', getData('memos').filter(x => x.id !== id));
   loadAllData();
+  updateTrashBadge();
 }
+
+function setMemoFilter(c) { memoFilter = c; renderMemos(); }
 
 function renderMemos() {
   const memos = getData('memos');
   document.getElementById('statMemos').textContent = memos.length;
   document.getElementById('memoBadge').textContent = memos.length;
 
-  // Recent (dashboard)
   const recentMemosEl = document.getElementById('recentMemos');
   const emptyMemosEl = document.getElementById('emptyMemos');
   recentMemosEl.innerHTML = '';
@@ -1364,120 +2265,684 @@ function renderMemos() {
     });
   }
 
-  // All memos
+  const tabsEl = document.getElementById('memoTabs');
+  if (tabsEl) {
+    const cats = ['all', ...['work','idea','learn','life','misc'].filter(c => memos.some(i => i.cat === c))];
+    tabsEl.innerHTML = cats.map(c => {
+      const cnt = c === 'all' ? memos.length : memos.filter(i => i.cat === c).length;
+      const lb = c === 'all' ? '全部' : CAT_LABELS[c];
+      return `<div class="inspo-tab ${memoFilter === c ? 'active' : ''}" onclick="setMemoFilter('${c}')">${lb}<span style="opacity:.6;margin-left:3px;">${cnt}</span></div>`;
+    }).join('');
+  }
+
   const allMemosEl = document.getElementById('allMemos');
   const emptyAllMemosEl = document.getElementById('emptyAllMemos');
+  if (!allMemosEl) return;
   allMemosEl.innerHTML = '';
-  if (memos.length === 0) {
-    emptyAllMemosEl.style.display = 'block';
+  if (memos.length === 0) { emptyAllMemosEl.style.display = 'block'; return; }
+  emptyAllMemosEl.style.display = 'none';
+  const search = (document.getElementById('memoSearch') ? document.getElementById('memoSearch').value : '').toLowerCase();
+  let list = memoFilter === 'all' ? memos : memos.filter(i => i.cat === memoFilter);
+  if (search) list = list.filter(i => i.text.toLowerCase().includes(search) || (i.tags || []).some(t => t.toLowerCase().includes(search)));
+  if (list.length === 0) { allMemosEl.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-text">没有匹配的灵感</div></div>'; return; }
+  list.forEach(m => {
+    const cat = m.cat || 'misc';
+    const tagsHtml = (m.tags || []).length ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;">${m.tags.map(t => `<span class="inspo-tag tag-blue">#${escapeHTML(t)}</span>`).join('')}</div>` : '';
+    allMemosEl.innerHTML += `
+      <div class="inspo-card">
+        <span class="inspo-edit" onclick="editMemo(${m.id})" title="编辑">✎</span>
+        <span class="inspo-del" onclick="deleteMemo(${m.id})" title="删除">🗑</span>
+        <span class="inspo-tag" style="${CAT_COLORS[cat]}">${CAT_LABELS[cat] || '✍️ 随笔'}</span>
+        ${m.organized ? '<span class="inspo-tag tag-gray" style="margin-left:4px;">✅ 已整理</span>' : `<span style="margin-left:8px;cursor:pointer;font-size:12px;color:var(--accent);" onclick="organizeInspo(${m.id})">📝 整理</span>`}
+        <div class="inspo-text">${escapeHTML(m.text)}</div>
+        ${tagsHtml}
+        <div class="inspo-time">${m.date} ${m.time}</div>
+      </div>`;
+  });
+}
+
+// 灵感 → 备忘录 联动
+function organizeInspo(id) {
+  const m = getData('memos').find(x => x.id === id);
+  if (!m) return;
+  if (m.organized) { showToast('该灵感已整理', 'warn'); return; }
+  const catLabel = CAT_LABELS[m.cat || 'misc'] || '随笔';
+  const d = new Date();
+  const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const title = catLabel + ' 灵感整理 · ' + dateStr;
+  let content = m.text;
+  if ((m.tags || []).length) content += '\n\n标签：' + m.tags.map(t => '#' + t).join(' ');
+  const notes = getData('notes');
+  notes.unshift({ id: Date.now(), title, content, date: dateStr, time: d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) });
+  setData('notes', notes);
+  m.organized = true;
+  setData('memos', getData('memos'));
+  loadAllData();
+  showToast('已整理为备忘录「' + title + '」', 'success');
+}
+
+function organizeAllInspo(cat) {
+  const memos = getData('memos');
+  let pool = cat === 'all' ? memos.filter(i => !i.organized) : memos.filter(i => i.cat === cat && !i.organized);
+  if (pool.length === 0) { showToast('没有待整理的灵感', 'warn'); return; }
+  const catLabel = cat === 'all' ? '全部灵感' : (CAT_LABELS[cat] || '随笔');
+  const d = new Date();
+  const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const title = catLabel + ' 批量整理 · ' + dateStr + '（' + pool.length + '条）';
+  let content = '';
+  if (cat === 'all') {
+    const groups = {};
+    pool.forEach(i => { const c = i.cat || 'misc'; (groups[c] = groups[c] || []).push(i); });
+    ['work','idea','learn','life','misc'].forEach(c => {
+      if (!groups[c]) return;
+      content += '【' + CAT_LABELS[c] + '】\n';
+      groups[c].forEach((i, idx) => { content += (idx + 1) + '. ' + i.text + '\n'; });
+      content += '\n';
+    });
   } else {
-    emptyAllMemosEl.style.display = 'none';
-    memos.forEach(m => {
-      allMemosEl.innerHTML += `
-        <div class="memo-card">
-          <div class="memo-text">${escapeHTML(m.text)}</div>
-          <div class="memo-time">${m.date} ${m.time}</div>
-          <span style="float:right;cursor:pointer;color:#ccc;font-size:12px;" onclick="deleteMemo(${m.id})">删除</span>
+    pool.forEach((i, idx) => { content += (idx + 1) + '. ' + i.text + '\n'; });
+  }
+  const notes = getData('notes');
+  notes.unshift({ id: Date.now(), title, content: content.trim(), date: dateStr, time: d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) });
+  setData('notes', notes);
+  pool.forEach(i => { i.organized = true; });
+  setData('memos', getData('memos'));
+  loadAllData();
+  showToast('已将 ' + pool.length + ' 条灵感整理为备忘录', 'success');
+}
+
+// ============ NOTES (备忘录) ============
+let editingNoteId = null;
+
+function saveNote() {
+  const titleEl = document.getElementById('noteTitleInput');
+  const contentEl = document.getElementById('noteContentInput');
+  const title = titleEl.value.trim();
+  const content = contentEl.value.trim();
+  if (!title && !content) return;
+
+  const notes = getData('notes');
+  const now = new Date();
+  const dateStr = now.toISOString().split('T')[0];
+  const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+
+  if (editingNoteId) {
+    const note = notes.find(n => n.id === editingNoteId);
+    if (note) {
+      note.title = title;
+      note.content = content;
+      note.date = dateStr;
+      note.time = timeStr;
+    }
+    editingNoteId = null;
+    document.getElementById('noteCancelBtn').style.display = 'none';
+  } else {
+    notes.unshift({ id: Date.now(), title, content, date: dateStr, time: timeStr });
+  }
+  setData('notes', notes);
+  titleEl.value = '';
+  contentEl.value = '';
+  loadAllData();
+  showToast('备忘录已保存', 'success');
+}
+
+function editNote(id) {
+  const note = getData('notes').find(n => n.id === id);
+  if (!note) return;
+  editingNoteId = id;
+  document.getElementById('noteTitleInput').value = note.title;
+  document.getElementById('noteContentInput').value = note.content;
+  document.getElementById('noteCancelBtn').style.display = 'inline-block';
+  document.getElementById('noteTitleInput').focus();
+  document.getElementById('page-notes').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelNoteEdit() {
+  editingNoteId = null;
+  document.getElementById('noteTitleInput').value = '';
+  document.getElementById('noteContentInput').value = '';
+  document.getElementById('noteCancelBtn').style.display = 'none';
+}
+
+function deleteNote(id) {
+  if (!confirm('确定要删除这条备忘录吗？')) return;
+  setData('notes', getData('notes').filter(n => n.id !== id));
+  if (editingNoteId === id) cancelNoteEdit();
+  loadAllData();
+}
+
+function renderNotes() {
+  const notes = getData('notes');
+  document.getElementById('statNotes').textContent = notes.length;
+  document.getElementById('notesBadge').textContent = notes.length;
+
+  const allNotesEl = document.getElementById('allNotes');
+  const emptyEl = document.getElementById('emptyAllNotes');
+  allNotesEl.innerHTML = '';
+  if (notes.length === 0) {
+    emptyEl.style.display = 'block';
+  } else {
+    emptyEl.style.display = 'none';
+    notes.forEach(n => {
+      allNotesEl.innerHTML += `
+        <div class="note-card">
+          <div class="note-card-title">${escapeHTML(n.title) || '(无标题)'}</div>
+          <div class="note-card-content">${escapeHTML(n.content)}</div>
+          <div class="note-card-time">${n.date} ${n.time}</div>
+          <div class="note-card-actions">
+            <span onclick="editNote(${n.id})">✏️ 编辑</span>
+            <span class="del" onclick="deleteNote(${n.id})">🗑️ 删除</span>
+          </div>
         </div>`;
     });
   }
 }
 
+// ============ SEED NOTES (预置备忘录) ============
+// v 为版本号：确保已上线的旧备忘录也能随版本号自动刷新；用户手动删除后不会再复活。
+const SEED_NOTES = [
+  {
+    id: 'seed-guanlin-20260803',
+    v: 3,
+    title: '广西冠林沟通小结（老挝土地投资 · 整理稿）',
+    date: '2026-08-03',
+    time: '整理',
+    content: `【背景】
+与广西冠林就某项目（落地老挝，涉及土地及特许经营）的推进路径进行沟通。我方为象邦（chanbang）；象邦从第二阶段（签 MOU）起开始收费，第一阶段不收费。
+
+【推进四阶段（总周期约 2 年）】
+一、土地司各部门征集意见、实地勘查丈量（约 30–45 天）：费用 6 万美元（副司长介绍费 3 万 + 勘查 1 万 + 征集意见 2 万）；象邦不收费。
+二、签署 MOU（村/县/省多轮谈判，3.5–5 个月）：费用 11–12 万美元；象邦起收费，项目把握性较大。
+三、环评、可研、CA、社会贡献、备忘录履行保证金（约 10 个月）：费用 15–20 万美元（建议聘部委推荐公司编写，冠林来谈）。
+四、签署特许经营协议：费用约 30 万美元（签 MOU 后把握较大；参考：某公司 2000 公顷签字费约 100 万美元）。
+
+【费用测算】
+政府规费 / 第三方合计约：6 + 11~12 + 15~20 + 30 ≈ 62–68 万美元（不含象邦服务费）。
+
+【象邦服务费支付方式（三选一，单位：万美元）】
+方案一：MOU 签署后 2 + CA 签署前 2 + CA 签署后 2 = 6 万
+方案二：MOU 签署后 2 + CA 签署前 2 + CA 签署后 1 + CA 签署后 2 = 7 万
+方案三（风险金抵扣）：
+  - 签署服务协议后，甲方付项目风险金 3 万（乙方暂收，可抵扣）；
+  - MOU 签署完成后支付 5 万（其中风险金抵扣 2 万，甲方实付 3 万，风险金剩 1 万）；
+  - CA 签署完成后支付 2 万（其中前期 1 万风险金抵扣，甲方实付 1 万，风险金清零）；
+  - 象邦合计收入 7 万（含风险金）。
+  - 退款条款：① 协议签署后 1 年内 MOU 未能签署完成 → 乙方无息退还甲方风险金 3 万；② MOU 签署后 1.5 年内 CA 未能签署完成 → 乙方无息退还剩余风险金 1 万。
+
+【关键风险与待办】
+- 全周期约 2 年，多轮谈判不确定性高；签 MOU 后把握性才较高，收款应与之挂钩。
+- 阶段四签字费参考：某公司 2000 公顷约 100 万美元，可作报价锚点。
+
+来源：广西冠林沟通小结.docx（2026-07-29），由小助整理于 2026-08-03。`
+  },
+  {
+    id: 'seed-guanlin-docx-20260804',
+    v: 2,
+    title: '广西冠林沟通小结（docx 原文 · 2026-07-29）',
+    date: '2026-07-29',
+    time: '原文录入',
+    content: `日期：2026年7月29日
+
+【推进四阶段（老挝土地投资）】
+序 | 阶段 | 内容 | 部门 | 需时 | 金额（美元）
+1 | 一 | 土地司各部门征集意见、实地勘查丈量汇总（2周） | 土地司为主，各相关部门 | 约30-45天 | 副司长土地介绍费3万；土地勘查1万（人数10+）；征集意见2万，合计6万；第一阶段象邦不收费
+2 | 二 | MOU | 投资委、总理府为主，村县省（多轮谈判） | 3.5-4月，或5个月 | 11-12万，第二阶段签订备忘录，项目把握性比较大，象邦再收费
+3 | 三 | 环评、可研、CA、社会贡献、备忘录履行保证金 | 环境司、种植司、财政部、电力公司等 | 10个月 | 15-20万（建议聘请部委推荐公司编写，冠林来谈）
+4 | 四 | 签署特许经营协议 | 投资委、总理府 | — | 约30万（签Mou后比较有把握，某公司2000公顷签字费约100万）
+
+【象邦服务费支付方式（三选一，单位：万美元）】
+方案一：MOU 签署完成后 2 万、CA 签署前 2 万、CA 签署完成后 2 万。
+方案二：MOU 签署完成后 2 万、CA 签署前 2 万、CA 签署完成后 1 万，CA 签署完成后支付 2 万。
+方案三：
+  一、本次服务费 7 万美金：第一笔，甲方自本服务协议签署之日支付项目风险金 3 万；第二笔，甲方于 MOU 签署完成之日支付 5 万（前面风险金可以抵扣 2 万）；第三笔，甲方于 CA 签署完成之日支付 2 万（前期 1 万风险金可做抵扣）。
+  二、项目风险金退还条款：
+    1. 非因甲方自身原因，若在本协议签署之日起 1 年内未完成 MOU 签署，乙方无息退还甲方风险金。
+    2. 非因甲方自身原因，若在 MOU 签署之日起 2 年内未完成 CA 签署，乙方无息退还剩余风险金。完成，乙方无息退还甲方风险金。MOU 签署后 1.5 年内 CA 无法签署完成，乙方无息退还剩余 1 万美元风险金。
+
+来源：广西冠林沟通小结.docx（2026-07-29）原文，由小助于 2026-08-04 录入备忘录。`
+  }
+];
+
+function ensureSeedNotes() {
+  const notes = getData('notes');
+  const seedVersions = getData('seedNotes') || {};
+  let changed = false;
+  SEED_NOTES.forEach(s => {
+    const existing = notes.find(n => n.id === s.id);
+    if (existing) {
+      if ((existing.v || 0) < s.v) {
+        existing.title = s.title; existing.content = s.content;
+        existing.date = s.date; existing.time = s.time; existing.v = s.v;
+        changed = true;
+      }
+    } else if (!seedVersions[s.id]) {
+      notes.unshift({ id: s.id, v: s.v, title: s.title, content: s.content, date: s.date, time: s.time });
+      changed = true;
+    }
+    seedVersions[s.id] = s.v;
+  });
+  if (changed) setData('notes', notes);
+  setData('seedNotes', seedVersions);
+}
+
 // ============ CASES ============
+let currentCaseId = null;
+
 function addCase() {
   const input = document.getElementById('caseInput');
   const text = input.value.trim();
   if (!text) return;
-
   const cases = getData('cases');
+  const now = new Date();
   cases.unshift({
-    id: Date.now(),
-    title: text,
-    status: 'in-progress',
-    date: new Date().toISOString().split('T')[0],
-    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    id: Date.now(), title: text, status: 'in-progress',
+    client: '', type: '', dueDate: '',
+    date: now.toISOString().split('T')[0],
+    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    progress: [], review: {},
   });
   setData('cases', cases);
   input.value = '';
   loadAllData();
+  renderCalendar();
   showToast('案件已添加', 'success');
 }
 
 function toggleCase(id) {
   const cases = getData('cases');
   const c = cases.find(x => x.id === id);
-  if (c) {
-    c.status = c.status === 'done' ? 'in-progress' : 'done';
-    setData('cases', cases);
-    loadAllData();
-  }
+  if (c) { c.status = c.status === 'done' ? 'in-progress' : 'done'; setData('cases', cases); loadAllData(); renderCalendar(); }
 }
 
 function deleteCase(id) {
-  if (!confirm('确定要删除吗？')) return;
-  let cases = getData('cases');
-  cases = cases.filter(x => x.id !== id);
-  setData('cases', cases);
+  const c = getData('cases').find(x => x.id === id);
+  if (!c) return;
+  if (!confirm('确定要删除这个案件吗？（可到「垃圾箱」恢复）')) return;
+  moveToTrash('law', '律所案件', c);
+  setData('cases', getData('cases').filter(x => x.id !== id));
   loadAllData();
+  renderCalendar();
+  updateTrashBadge();
 }
 
-function renderCases() {
-  const cases = getData('cases');
-  const inProgress = cases.filter(c => c.status === 'in-progress');
-  document.getElementById('statCases').textContent = cases.length;
-  document.getElementById('caseBadge').textContent = inProgress.length;
-  document.getElementById('bizCases').textContent = cases.length + ' 个案件';
+function openCase(id) {
+  currentCaseId = id;
+  switchCaseTab('basic');
+  document.getElementById('caseModal').classList.add('show');
+}
 
-  const allCasesEl = document.getElementById('allCases');
-  const emptyEl = document.getElementById('emptyAllCases');
-  allCasesEl.innerHTML = '';
-  if (cases.length === 0) {
-    emptyEl.style.display = 'block';
+function closeCaseModal() {
+  document.getElementById('caseModal').classList.remove('show');
+  currentCaseId = null;
+}
+
+function switchCaseTab(tab) {
+  document.querySelectorAll('.case-modal-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  renderCaseTab(tab);
+}
+
+function renderCaseTab(tab) {
+  const c = getData('cases').find(x => x.id === currentCaseId);
+  if (!c) return;
+  document.getElementById('caseModalTitle').textContent = c.title;
+  const body = document.getElementById('caseModalBody');
+  if (tab === 'basic') body.innerHTML = caseBasicHTML(c);
+  else if (tab === 'progress') body.innerHTML = caseProgressHTML(c);
+  else if (tab === 'review') body.innerHTML = caseReviewHTML(c);
+}
+
+function caseBasicHTML(c) {
+  const isDone = c.status === 'done';
+  return `
+    <div class="case-meta-row">
+      <span class="case-status-badge ${c.status}">${isDone ? '已完结' : '进行中'}</span>
+      <span style="font-size:12px;color:var(--text-secondary);">创建于 ${c.date} ${c.time||''}</span>
+    </div>
+    <div class="form-row">
+      <div>
+        <label class="form-label">当事人/客户</label>
+        <input class="form-control" id="caseClientInput" value="${escapeHTML(c.client||'')}" placeholder="如：某某公司 / 个人">
+      </div>
+      <div>
+        <label class="form-label">案件类型</label>
+        <select class="form-control" id="caseTypeInput">
+          ${['','民事','刑事','行政','仲裁','非诉','调查','其他'].map(t=>`<option value="${t}" ${c.type===t?'selected':''}>${t||'未选择'}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <label class="form-label">截止日期（显示在日历）</label>
+    <input type="date" class="form-control" id="caseDueInput" value="${c.dueDate||''}">
+    <label class="form-label">案件备注 / 描述</label>
+    <textarea class="form-control" id="caseNotesInput" placeholder="案件背景、要点、注意事项...">${escapeHTML(c.notes||'')}</textarea>
+    <div class="modal-actions">
+      <button class="btn btn-accent" onclick="saveCaseBasic()">保存信息</button>
+      ${isDone
+        ? `<button class="btn btn-ghost" onclick="reopenCase(${c.id})">重新开启</button>`
+        : `<button class="btn btn-success" onclick="closeCase(${c.id})">完结案件</button>`}
+      <button class="btn btn-danger" onclick="deleteCase(${c.id});closeCaseModal()">删除案件</button>
+    </div>
+  `;
+}
+
+function saveCaseBasic() {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === currentCaseId);
+  if (!c) return;
+  c.client = document.getElementById('caseClientInput').value.trim();
+  c.type = document.getElementById('caseTypeInput').value;
+  c.dueDate = document.getElementById('caseDueInput').value;
+  c.notes = document.getElementById('caseNotesInput').value.trim();
+  setData('cases', cases);
+  loadAllData();
+  renderCalendar();
+  renderCaseTab('basic');
+  showToast('案件信息已保存', 'success');
+}
+
+function closeCase(id) {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  c.status = 'done';
+  if (!c.dueDate) c.dueDate = formatDate(new Date());
+  c.progress = c.progress || [];
+  c.progress.push({ id: Date.now(), date: formatDate(new Date()), content: '案件已完结，进入复盘阶段', note: '', isReview: true });
+  setData('cases', cases);
+  loadAllData();
+  renderCalendar();
+  renderCaseTab('review');
+  showToast('案件已完结，请填写复盘', 'success');
+}
+
+function reopenCase(id) {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  c.status = 'in-progress';
+  setData('cases', cases);
+  loadAllData();
+  renderCalendar();
+  renderCaseTab('basic');
+  showToast('案件已重新开启', 'success');
+}
+
+function caseProgressHTML(c) {
+  const list = (c.progress || []).slice().sort((a,b)=> new Date(b.date) - new Date(a.date));
+  let html = `
+    <div class="progress-add">
+      <div class="form-row">
+        <div>
+          <label class="form-label">日期</label>
+          <input type="date" class="form-control" id="progDate" value="${formatDate(new Date())}">
+        </div>
+        <div>
+          <label class="form-label">进展内容</label>
+          <input class="form-control" id="progContent" placeholder="如：已完成证据收集，准备起诉状">
+        </div>
+      </div>
+      <label class="form-label">备注（选填）</label>
+      <textarea class="form-control" id="progNote" placeholder="补充说明..."></textarea>
+      <div class="modal-actions" style="margin-top:14px;">
+        <button class="btn btn-accent btn-sm" onclick="addCaseProgress(${c.id})">+ 添加进展</button>
+      </div>
+    </div>
+  `;
+  if (list.length === 0) {
+    html += `<div class="empty-state" style="padding:24px;"><div class="empty-text">暂无进展记录，上方持续录入</div></div>`;
   } else {
-    emptyEl.style.display = 'none';
-    cases.forEach(c => {
-      const isDone = c.status === 'done';
-      allCasesEl.innerHTML += `
-        <li class="task-item">
-          <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleCase(${c.id})">${isDone ? '✓' : ''}</div>
-          <div class="task-content">
-            <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
-            <div class="task-meta">${c.date} ${c.time}</div>
+    html += '<div class="progress-timeline">';
+    list.forEach(p => {
+      html += `
+        <div class="progress-item ${p.isReview?'review':''}">
+          <div class="progress-date">${p.date} ${p.isReview?'· 复盘节点':''}</div>
+          <div class="progress-content">${escapeHTML(p.content)}</div>
+          ${p.note?`<div class="progress-note">备注：${escapeHTML(p.note)}</div>`:''}
+          <div class="progress-item-actions">
+            <span onclick="editCaseProgress(${c.id},${p.id})">✏️ 编辑</span>
+            <span class="del" onclick="deleteCaseProgress(${c.id},${p.id})">🗑️ 删除</span>
           </div>
-          <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
-          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteCase(${c.id})" title="删除">🗑️</span>
-        </li>`;
+        </div>`;
     });
+    html += '</div>';
   }
+  return html;
+}
+
+function addCaseProgress(id) {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  const content = document.getElementById('progContent').value.trim();
+  if (!content) { showToast('请输入进展内容','error'); return; }
+  c.progress = c.progress || [];
+  c.progress.push({
+    id: Date.now(),
+    date: document.getElementById('progDate').value || formatDate(new Date()),
+    content,
+    note: document.getElementById('progNote').value.trim(),
+  });
+  setData('cases', cases);
+  loadAllData();
+  renderCalendar();
+  renderCaseTab('progress');
+  showToast('进展已记录', 'success');
+}
+
+function editCaseProgress(id, pid) {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  const p = c && c.progress.find(x => x.id === pid);
+  if (!p) return;
+  const content = prompt('修改进展内容：', p.content);
+  if (content === null) return;
+  p.content = content.trim();
+  p.note = prompt('修改备注（留空删除原备注）：', p.note || '') || '';
+  setData('cases', cases);
+  loadAllData();
+  renderCalendar();
+  renderCaseTab('progress');
+}
+
+function deleteCaseProgress(id, pid) {
+  if (!confirm('确定删除这条进展？')) return;
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  c.progress = c.progress.filter(x => x.id !== pid);
+  setData('cases', cases);
+  loadAllData();
+  renderCalendar();
+  renderCaseTab('progress');
+}
+
+function caseReviewHTML(c) {
+  if (c.status !== 'done') {
+    return `
+      <div class="review-locked">
+        <div class="review-locked-icon">🔒</div>
+        <div class="review-locked-text">案件复盘尚未开启</div>
+        <div class="review-locked-hint" style="font-size:13px;">请先在「基本信息」中点击「完结案件」，即可进行复盘</div>
+        <button class="btn btn-success btn-sm" style="margin-top:16px;" onclick="closeCase(${c.id})">完结案件并开启复盘</button>
+      </div>`;
+  }
+  const r = c.review || {};
+  const stars = ['非常满意','满意','一般','不满意'];
+  return `
+    <div class="review-section">
+      <label class="form-label">案件结果</label>
+      <textarea class="form-control" id="revOutcome" placeholder="最终结果、判决/和解情况等">${escapeHTML(r.outcome||'')}</textarea>
+      <div class="form-row">
+        <div>
+          <label class="form-label">办理时长</label>
+          <input class="form-control" id="revDuration" value="${escapeHTML(r.duration||'')}" placeholder="如：3个月">
+        </div>
+        <div>
+          <label class="form-label">满意度</label>
+          <select class="form-control" id="revSat">
+            ${stars.map(s=>`<option value="${s}" ${r.satisfaction===s?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <label class="form-label">经验教训</label>
+      <textarea class="form-control" id="revLessons" placeholder="本次办案的经验、踩过的坑">${escapeHTML(r.lessons||'')}</textarea>
+      <label class="form-label">改进建议</label>
+      <textarea class="form-control" id="revImprove" placeholder="后续如何改进">${escapeHTML(r.improvements||'')}</textarea>
+      <label class="form-label">总体评价</label>
+      <textarea class="form-control" id="revSummary" placeholder="总体评价与心得">${escapeHTML(r.summary||'')}</textarea>
+      <div class="modal-actions">
+        <button class="btn btn-accent" onclick="saveCaseReview(${c.id})">保存复盘</button>
+      </div>
+    </div>
+    <div class="ai-summary-box">
+      <div class="ai-summary-header">
+        <div class="ai-summary-title">🤖 AI 复盘总结</div>
+        <button class="btn btn-accent btn-sm" id="aiSumBtn" onclick="generateCaseAISummary(${c.id})">生成总结</button>
+      </div>
+      <div id="aiSummaryContent">
+        ${r.aiSummary ? `<div class="ai-summary-content">${escapeHTML(r.aiSummary)}</div>` : '<div style="font-size:13px;color:var(--text-secondary);">点击「生成总结」，将根据案件信息与复盘内容自动生成智能总结</div>'}
+      </div>
+    </div>
+  `;
+}
+
+function saveCaseReview(id) {
+  const cases = getData('cases');
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  c.review = {
+    outcome: document.getElementById('revOutcome').value.trim(),
+    duration: document.getElementById('revDuration').value.trim(),
+    satisfaction: document.getElementById('revSat').value,
+    lessons: document.getElementById('revLessons').value.trim(),
+    improvements: document.getElementById('revImprove').value.trim(),
+    summary: document.getElementById('revSummary').value.trim(),
+    aiSummary: (c.review||{}).aiSummary || '',
+  };
+  setData('cases', cases);
+  renderCaseTab('review');
+  showToast('复盘已保存', 'success');
+}
+
+function generateCaseAISummary(id) {
+  const c = getData('cases').find(x => x.id === id);
+  if (!c) return;
+  const btn = document.getElementById('aiSumBtn');
+  const box = document.getElementById('aiSummaryContent');
+  if (btn) { btn.disabled = true; btn.textContent = '生成中...'; }
+  box.innerHTML = '<div class="ai-summary-loading"><div class="spinner"></div>正在生成复盘总结...</div>';
+  setTimeout(() => {
+    const cases = getData('cases');
+    const cc = cases.find(x => x.id === id);
+    if (!cc) return;
+    const r = cc.review || {};
+    const prog = (cc.progress || []).filter(p=>!p.isReview);
+    let s = '';
+    s += '═══ 案件复盘智能总结 ═══\n\n';
+    s += '【案件概况】\n';
+    s += `名称：${cc.title}\n`;
+    if (cc.type) s += `类型：${cc.type}\n`;
+    if (cc.client) s += `当事人/客户：${cc.client}\n`;
+    s += `状态：${cc.status==='done'?'已完结':'进行中'}\n`;
+    if (cc.dueDate) s += `截止日期：${cc.dueDate}\n`;
+    s += '\n';
+    s += '【办理过程】\n';
+    if (prog.length) {
+      s += `共记录 ${prog.length} 次进展：\n`;
+      prog.slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach((p,i)=>{
+        s += `${i+1}. ${p.date}：${p.content}${p.note?`（${p.note}）`:''}\n`;
+      });
+    } else s += '暂无进展记录。\n';
+    s += '\n';
+    s += '【案件结果】\n' + (r.outcome || '未填写') + '\n\n';
+    if (r.duration) s += `办理时长：${r.duration}\n`;
+    if (r.satisfaction) s += `满意度：${r.satisfaction}\n`;
+    s += '\n';
+    s += '【经验教训】\n' + (r.lessons || '未填写') + '\n\n';
+    s += '【改进建议】\n' + (r.improvements || '未填写') + '\n\n';
+    s += '【总体评价】\n' + (r.summary || '未填写') + '\n\n';
+    s += '【系统分析】\n';
+    if (cc.dueDate && cc.date) {
+      const days = Math.round((new Date(cc.dueDate)-new Date(cc.date))/(1000*60*60*24));
+      s += `• 案件周期约 ${days} 天（立项 ${cc.date} → 截止 ${cc.dueDate}）\n`;
+    }
+    if (prog.length) {
+      const end = cc.dueDate || formatDate(new Date());
+      const avg = cc.date ? Math.round((new Date(end)-new Date(cc.date))/(1000*60*60*24)/prog.length) : 0;
+      s += `• 平均约每 ${avg} 天推进一次，共 ${prog.length} 个关键节点\n`;
+    }
+    if (r.satisfaction==='不满意'||r.satisfaction==='一般') s += `• 满意度偏低（${r.satisfaction}），建议复盘根因并制定改进\n`;
+    s += '\n生成时间：' + new Date().toLocaleString('zh-CN') + '\n';
+    cc.review = cc.review || {};
+    cc.review.aiSummary = s;
+    setData('cases', cases);
+    box.innerHTML = `<div class="ai-summary-content">${escapeHTML(s)}</div>`;
+    if (btn) { btn.disabled = false; btn.textContent = '重新生成'; }
+    showToast('复盘总结已生成', 'success');
+  }, 1500);
 }
 
 // ============ CERTIFICATES ============
+let editingCertId = null;
+
 function addCert() {
   const input = document.getElementById('certInput');
   const text = input.value.trim();
   if (!text) return;
   const certs = getData('certs');
+  if (editingCertId) {
+    const c = certs.find(x => x.id === editingCertId);
+    if (c) c.title = text;
+    setData('certs', certs);
+    editingCertId = null;
+    input.value = '';
+    const btn = document.querySelector('#page-certificates .quick-add button');
+    if (btn) btn.textContent = '+ 添加';
+    loadAllData();
+    renderCalendar();
+    showToast('已更新', 'success');
+    return;
+  }
+  const now = new Date();
   certs.unshift({
-    id: Date.now(), title: text, status: 'in-progress',
-    date: new Date().toISOString().split('T')[0],
-    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    id: Date.now(), title: text, status: 'in-progress', dueDate: '',
+    date: now.toISOString().split('T')[0],
+    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
   });
   setData('certs', certs);
   input.value = '';
   loadAllData();
+  renderCalendar();
   showToast('已添加', 'success');
+}
+
+function editCert(id) {
+  const c = getData('certs').find(x => x.id === id);
+  if (!c) return;
+  editingCertId = id;
+  const input = document.getElementById('certInput');
+  input.value = c.title;
+  input.focus();
+  const btn = document.querySelector('#page-certificates .quick-add button');
+  if (btn) btn.textContent = '✓ 更新';
+  document.getElementById('page-certificates').scrollIntoView({ behavior: 'smooth' });
 }
 
 function toggleCert(id) {
   const certs = getData('certs');
   const c = certs.find(x => x.id === id);
-  if (c) { c.status = c.status === 'done' ? 'in-progress' : 'done'; setData('certs', certs); loadAllData(); }
+  if (c) { c.status = c.status === 'done' ? 'in-progress' : 'done'; setData('certs', certs); loadAllData(); renderCalendar(); }
 }
 
 function deleteCert(id) {
-  if (!confirm('确定要删除吗？')) return;
+  const c = getData('certs').find(x => x.id === id);
+  if (!c) return;
+  if (!confirm('确定要删除吗？（可到「垃圾箱」恢复）')) return;
+  if (editingCertId === id) { editingCertId = null; const btn = document.querySelector('#page-certificates .quick-add button'); if (btn) btn.textContent = '+ 添加'; }
+  moveToTrash('cert', '证件业务', c);
   setData('certs', getData('certs').filter(x => x.id !== id));
   loadAllData();
+  renderCalendar();
+  updateTrashBadge();
 }
 
 function renderCerts() {
@@ -1500,9 +2965,11 @@ function renderCerts() {
           <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleCert(${c.id})">${isDone ? '✓' : ''}</div>
           <div class="task-content">
             <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(c.title)}</div>
-            <div class="task-meta">${c.date} ${c.time}</div>
+            <div class="task-meta">${c.date} ${c.time}${c.dueDate? ' · 截止 '+c.dueDate : ''}</div>
           </div>
           <span class="task-status ${c.status}">${isDone ? '已完成' : '进行中'}</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editCert(${c.id})" title="编辑">✏️</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="setItemDue('certs',${c.id})" title="设置截止日期(日历)">📅</span>
           <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteCert(${c.id})">🗑️</span>
         </li>`;
     });
@@ -1510,32 +2977,67 @@ function renderCerts() {
 }
 
 // ============ OTHERS ============
+let editingOtherId = null;
+
 function addOther() {
   const input = document.getElementById('otherInput');
   const text = input.value.trim();
   if (!text) return;
   const others = getData('others');
+  if (editingOtherId) {
+    const o = others.find(x => x.id === editingOtherId);
+    if (o) o.title = text;
+    setData('others', others);
+    editingOtherId = null;
+    input.value = '';
+    const btn = document.querySelector('#page-others .quick-add button');
+    if (btn) btn.textContent = '+ 添加';
+    loadAllData();
+    renderCalendar();
+    showToast('已更新', 'success');
+    return;
+  }
+  const now = new Date();
   others.unshift({
-    id: Date.now(), title: text, status: 'in-progress',
-    date: new Date().toISOString().split('T')[0],
-    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    id: Date.now(), title: text, status: 'in-progress', dueDate: '',
+    date: now.toISOString().split('T')[0],
+    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
   });
   setData('others', others);
   input.value = '';
   loadAllData();
+  renderCalendar();
   showToast('已添加', 'success');
+}
+
+function editOther(id) {
+  const o = getData('others').find(x => x.id === id);
+  if (!o) return;
+  editingOtherId = id;
+  const input = document.getElementById('otherInput');
+  input.value = o.title;
+  input.focus();
+  const btn = document.querySelector('#page-others .quick-add button');
+  if (btn) btn.textContent = '✓ 更新';
+  document.getElementById('page-others').scrollIntoView({ behavior: 'smooth' });
 }
 
 function toggleOther(id) {
   const others = getData('others');
   const o = others.find(x => x.id === id);
-  if (o) { o.status = o.status === 'done' ? 'in-progress' : 'done'; setData('others', others); loadAllData(); }
+  if (o) { o.status = o.status === 'done' ? 'in-progress' : 'done'; setData('others', others); loadAllData(); renderCalendar(); }
 }
 
 function deleteOther(id) {
-  if (!confirm('确定要删除吗？')) return;
+  const o = getData('others').find(x => x.id === id);
+  if (!o) return;
+  if (!confirm('确定要删除吗？（可到「垃圾箱」恢复）')) return;
+  if (editingOtherId === id) { editingOtherId = null; const btn = document.querySelector('#page-others .quick-add button'); if (btn) btn.textContent = '+ 添加'; }
+  moveToTrash('other', '其他业务', o);
   setData('others', getData('others').filter(x => x.id !== id));
   loadAllData();
+  renderCalendar();
+  updateTrashBadge();
 }
 
 function renderOthers() {
@@ -1557,13 +3059,29 @@ function renderOthers() {
           <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleOther(${o.id})">${isDone ? '✓' : ''}</div>
           <div class="task-content">
             <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(o.title)}</div>
-            <div class="task-meta">${o.date} ${o.time}</div>
+            <div class="task-meta">${o.date} ${o.time}${o.dueDate? ' · 截止 '+o.dueDate : ''}</div>
           </div>
           <span class="task-status ${o.status}">${isDone ? '已完成' : '进行中'}</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editOther(${o.id})" title="编辑">✏️</span>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="setItemDue('others',${o.id})" title="设置截止日期(日历)">📅</span>
           <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteOther(${o.id})">🗑️</span>
         </li>`;
     });
   }
+}
+
+// 设置证件/其他业务的截止日期（联动日历）
+function setItemDue(coll, id) {
+  const arr = getData(coll);
+  const item = arr.find(x => x.id === id);
+  if (!item) return;
+  const d = prompt('设置截止日期（格式 YYYY-MM-DD，留空则清除）：', item.dueDate || '');
+  if (d === null) return;
+  item.dueDate = d.trim();
+  setData(coll, arr);
+  loadAllData();
+  renderCalendar();
+  showToast(item.dueDate ? '截止日期已设置' : '已清除截止日期', 'success');
 }
 
 // ============ MATERIALS ============
@@ -1582,9 +3100,479 @@ function renderMaterials() {
             <div class="task-title">${escapeHTML(m.title)}</div>
             <div class="task-meta">${m.type} · ${m.date}</div>
           </div>
+          <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteMaterial(${m.id})" title="删除">🗑️</span>
         </li>`;
     });
   }
+}
+
+function deleteMaterial(id) {
+  const m = getData('materials').find(x => x.id === id);
+  if (!m) return;
+  if (!confirm('确定要删除这个材料模板吗？（可到「垃圾箱」恢复）')) return;
+  moveToTrash('mat', '材料库', m);
+  setData('materials', getData('materials').filter(x => x.id !== id));
+  loadAllData();
+  updateTrashBadge();
+}
+
+// ============ TODOS (待办事项) ============
+let editingTodoId = null;
+
+function addTodo() {
+  const input = document.getElementById('todoInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const todos = getData('todos');
+  if (editingTodoId) {
+    const t = todos.find(x => x.id === editingTodoId);
+    if (t) t.text = text;
+    setData('todos', todos);
+    editingTodoId = null;
+    input.value = '';
+    const btn = document.querySelector('#page-todos .quick-add button');
+    if (btn) btn.textContent = '+ 添加待办';
+    loadAllData();
+    showToast('待办已更新', 'success');
+    return;
+  }
+  todos.unshift({ id: Date.now(), text, done: false, created: Date.now() });
+  setData('todos', todos);
+  input.value = '';
+  loadAllData();
+  showToast('待办已添加', 'success');
+}
+
+function toggleTodo(id) {
+  const todos = getData('todos');
+  const t = todos.find(x => x.id === id);
+  if (t) { t.done = !t.done; setData('todos', todos); loadAllData(); }
+}
+
+function editTodo(id) {
+  const t = getData('todos').find(x => x.id === id);
+  if (!t) return;
+  editingTodoId = id;
+  document.getElementById('todoInput').value = t.text;
+  document.getElementById('todoInput').focus();
+  const btn = document.querySelector('#page-todos .quick-add button');
+  if (btn) btn.textContent = '✓ 更新待办';
+  document.getElementById('page-todos').scrollIntoView({ behavior: 'smooth' });
+}
+
+function deleteTodo(id) {
+  const t = getData('todos').find(x => x.id === id);
+  if (!t) return;
+  if (!confirm('确定要删除这条待办吗？（可到「垃圾箱」恢复）')) return;
+  if (editingTodoId === id) { editingTodoId = null; const btn = document.querySelector('#page-todos .quick-add button'); if (btn) btn.textContent = '+ 添加待办'; }
+  moveToTrash('todo', '待办事项', t);
+  setData('todos', getData('todos').filter(x => x.id !== id));
+  loadAllData();
+  updateTrashBadge();
+}
+
+function renderTodos() {
+  const todos = getData('todos');
+  const badge = document.getElementById('todoBadge');
+  if (badge) badge.textContent = todos.filter(t => !t.done).length;
+
+  const allTodosEl = document.getElementById('allTodos');
+  const emptyEl = document.getElementById('emptyAllTodos');
+  const todoPlansEl = document.getElementById('todoPlans');
+  if (allTodosEl) {
+    allTodosEl.innerHTML = '';
+    if (todos.length === 0) { if (emptyEl) emptyEl.style.display = 'block'; }
+    else {
+      if (emptyEl) emptyEl.style.display = 'none';
+      todos.forEach(t => {
+        const isDone = t.done;
+        allTodosEl.innerHTML += `
+          <li class="task-item">
+            <div class="todo-check ${isDone ? 'checked' : ''}" onclick="toggleTodo(${t.id})">${isDone ? '✓' : ''}</div>
+            <div class="task-content">
+              <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(t.text)}</div>
+            </div>
+            <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editTodo(${t.id})" title="编辑">✏️</span>
+            <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="deleteTodo(${t.id})" title="删除">🗑️</span>
+          </li>`;
+      });
+    }
+  }
+
+  if (todoPlansEl) {
+    const plans = getData('plans');
+    todoPlansEl.innerHTML = '';
+    if (plans.length === 0) {
+      todoPlansEl.innerHTML = '<div style="font-size:13px;color:var(--text-secondary);">暂无工作计划</div>';
+    } else {
+      plans.forEach(p => {
+        const isDone = p.status === 'done';
+        todoPlansEl.innerHTML += `
+          <li class="task-item">
+            <div class="todo-check ${isDone ? 'checked' : ''}" onclick="togglePlan(${p.id})">${isDone ? '✓' : ''}</div>
+            <div class="task-content">
+              <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(p.title)}</div>
+              <div class="task-meta">${planDate(p)} ${p.dueTime || ''}</div>
+            </div>
+            <span class="task-status ${p.status}">${isDone ? '已完成' : '进行中'}</span>
+          </li>`;
+      });
+    }
+  }
+}
+
+// ============ TRASH (垃圾箱) ============
+function getTrash() { return getData('trash'); }
+
+function moveToTrash(type, typeLabel, item) {
+  const trash = getTrash();
+  trash.unshift({ tid: uid(), id: item.id, type, typeLabel: typeLabel || TRASH_TYPE_LABEL[type] || '项目', icon: TRASH_ICON[type] || '📄', data: item, deletedAt: Date.now() });
+  setData('trash', trash);
+}
+
+function trashPreview(t) {
+  const d = t.data || {};
+  switch (t.type) {
+    case 'workplan': return { title: d.title || '工作计划', sub: (d.dueDate || '') };
+    case 'inspiration': return { title: ((d.text || '').slice(0, 50)) || '灵感记录', sub: '' };
+    case 'note': return { title: d.title || '备忘录', sub: (d.content || '').slice(0, 40) };
+    case 'law': return { title: ((d.client || '') + (d.title ? (' · ' + d.title) : '') || '律所案件'), sub: (d.type || '') };
+    case 'cert': return { title: d.title || '证件业务', sub: (d.dueDate || '') };
+    case 'other': return { title: d.title || '其他业务', sub: (d.dueDate || '') };
+    case 'mat': return { title: d.title || '材料模板', sub: d.type || '' };
+    default: return { title: '项目', sub: '' };
+  }
+}
+
+function restoreFromTrash(tid, silent) {
+  const trash = getTrash();
+  const idx = trash.findIndex(t => t.tid === tid);
+  if (idx < 0) return;
+  const t = trash[idx];
+  const item = t.data;
+  const map = {
+    workplan: () => { const a = getData('plans'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('plans', a); },
+    inspiration: () => { const a = getData('memos'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('memos', a); },
+    note: () => { const a = getData('notes'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('notes', a); },
+    law: () => { const a = getData('cases'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('cases', a); },
+    cert: () => { const a = getData('certs'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('certs', a); },
+    other: () => { const a = getData('others'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('others', a); },
+    mat: () => { const a = getData('materials'); if (!a.some(x => x.id === item.id)) a.unshift(item); setData('materials', a); }
+  };
+  if (map[t.type]) map[t.type]();
+  trash.splice(idx, 1);
+  setData('trash', trash);
+  if (!silent) { loadAllData(); renderTrash(); updateTrashBadge(); showToast('已恢复到「' + t.typeLabel + '」', 'success'); }
+}
+
+function restoreAllTrash() {
+  const trash = getTrash();
+  if (trash.length === 0) { showToast('垃圾箱为空', 'warn'); return; }
+  const cnt = trash.length;
+  if (confirm('确定恢复全部 ' + cnt + ' 项到原板块吗？')) {
+    trash.slice().forEach(t => restoreFromTrash(t.tid, true));
+    loadAllData();
+    renderTrash();
+    updateTrashBadge();
+    showToast('已恢复全部 ' + cnt + ' 项', 'success');
+  }
+}
+
+function purgeTrash(tid) {
+  const trash = getTrash().filter(t => t.tid !== tid);
+  setData('trash', trash);
+  renderTrash();
+  updateTrashBadge();
+  showToast('已永久删除', 'success');
+}
+
+function emptyTrash() {
+  const trash = getTrash();
+  if (trash.length === 0) { showToast('垃圾箱已为空', 'warn'); return; }
+  if (confirm('确定要永久清空垃圾箱吗？此操作不可恢复（' + trash.length + ' 项将被删除）。')) {
+    setData('trash', []);
+    renderTrash();
+    updateTrashBadge();
+    showToast('垃圾箱已清空', 'success');
+  }
+}
+
+function fmtTrashTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleDateString('zh-CN') + ' ' + d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+}
+
+function updateTrashBadge() {
+  const b = document.getElementById('trashBadge');
+  if (!b) return;
+  const n = getTrash().length;
+  if (n > 0) { b.textContent = n; b.style.display = 'inline-block'; }
+  else b.style.display = 'none';
+}
+
+function renderTrash() {
+  const container = document.getElementById('trashContainer');
+  if (!container) return;
+  const trash = getTrash();
+  let html = `
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+      <span style="font-size:13px;color:var(--text-secondary);">共 <b style="color:var(--text-primary);">${trash.length}</b> 项待恢复</span>
+      <button class="btn-sm btn-restore" onclick="restoreAllTrash()">♻ 全部恢复</button>
+      <button class="btn-sm btn-purge" onclick="emptyTrash()">🗑 清空垃圾箱</button>
+    </div>`;
+  if (trash.length === 0) {
+    html += '<div class="empty-state" style="padding:30px;"><div class="empty-icon">🗑️</div><div class="empty-text">垃圾箱为空，放心删除吧</div></div>';
+  } else {
+    html += '<div class="dashboard-section" style="padding:8px 0;background:transparent;border:none;">';
+    trash.forEach(t => {
+      const p = trashPreview(t);
+      html += `
+        <div class="trash-item">
+          <span style="font-size:20px;">${t.icon || '📄'}</span>
+          <div class="trash-info">
+            <div class="trash-title">${escapeHTML(p.title)}</div>
+            <div class="trash-meta"><span class="tag-gray">${escapeHTML(t.typeLabel)}</span>${p.sub ? (' · ' + escapeHTML(p.sub)) : ''} · ${fmtTrashTime(t.deletedAt)}删除</div>
+          </div>
+          <div class="trash-actions">
+            <button class="btn-sm btn-restore" onclick="restoreFromTrash('${t.tid}')">♻ 恢复</button>
+            <button class="btn-sm btn-purge" onclick="purgeTrash('${t.tid}')">永久删除</button>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// ============ CALENDAR ============
+let calYear, calMonth, selectedDate;
+
+function initCalendarState() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  selectedDate = formatDate(now);
+}
+
+function formatDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function prevMonth() {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function nextMonth() {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function goToday() {
+  const now = new Date();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  selectedDate = formatDate(now);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  initCalendarStateIfNeeded();
+  const grid = document.getElementById('calendarGrid');
+  const title = document.getElementById('calendarTitle');
+  title.textContent = `${calYear}年${calMonth + 1}月`;
+
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  let html = weekdays.map(w => `<div class="cal-weekday">${w}</div>`).join('');
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+  // 聚合所有板块的事件（按日期）
+  const eventsByDate = buildEventsByDate();
+
+  const todayStr = formatDate(new Date());
+  const cells = [];
+
+  // leading days (prev month)
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const d = daysInPrev - i;
+    const prevM = calMonth - 1 < 0 ? 11 : calMonth - 1;
+    const prevY = calMonth - 1 < 0 ? calYear - 1 : calYear;
+    cells.push(cellHTML(prevY, prevM, d, eventsByDate, todayStr, false));
+  }
+  // current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push(cellHTML(calYear, calMonth, d, eventsByDate, todayStr, true));
+  }
+  // trailing days (next month) to fill 6 rows
+  const total = firstDay + daysInMonth;
+  const remainder = (7 - (total % 7)) % 7;
+  for (let i = 1; i <= remainder; i++) {
+    const nextM = calMonth + 1 > 11 ? 0 : calMonth + 1;
+    const nextY = calMonth + 1 > 11 ? calYear + 1 : calYear;
+    cells.push(cellHTML(nextY, nextM, i, eventsByDate, todayStr, false));
+  }
+
+  grid.innerHTML = html + cells.join('');
+  renderCalDetail();
+}
+
+// 聚合计划/案件/证件/其他业务的日期事件，修复"日历显示不完整"
+function buildEventsByDate() {
+  const map = {};
+  const add = (date, ev) => {
+    if (!date) return;
+    if (!map[date]) map[date] = [];
+    map[date].push(ev);
+  };
+  getData('plans').forEach(p => add(planDate(p), { type:'plan', id:p.id, title:p.title, status:p.status, time:p.dueTime }));
+  getData('cases').forEach(c => add(c.dueDate, { type:'case', id:c.id, title:c.title, status:c.status, time:'' }));
+  getData('certs').forEach(c => add(c.dueDate, { type:'cert', id:c.id, title:c.title, status:c.status, time:'' }));
+  getData('others').forEach(o => add(o.dueDate, { type:'other', id:o.id, title:o.title, status:o.status, time:'' }));
+  return map;
+}
+
+function initCalendarStateIfNeeded() {
+  if (calYear === undefined) {
+    const now = new Date();
+    calYear = now.getFullYear();
+    calMonth = now.getMonth();
+    selectedDate = formatDate(now);
+  }
+}
+
+function cellHTML(y, m, d, eventsByDate, todayStr, inMonth) {
+  const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const isToday = dateStr === todayStr;
+  const isSelected = dateStr === selectedDate;
+  const cls = ['cal-cell'];
+  if (!inMonth) cls.push('other-month');
+  if (isToday) cls.push('today');
+  if (isSelected) cls.push('selected');
+
+  let events = '';
+  const dayEvents = (eventsByDate[dateStr] || []).slice().sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+  const maxShow = 3;
+  dayEvents.slice(0, maxShow).forEach(e => {
+    const time = e.time ? `<span class="ev-time">${e.time}</span>` : '';
+    events += `<div class="cal-event type-${e.type} ${e.status === 'done' ? 'done' : ''}">${time}${escapeHTML(e.title)}</div>`;
+  });
+  if (dayEvents.length > maxShow) {
+    events += `<div class="cal-more">+${dayEvents.length - maxShow} 更多</div>`;
+  }
+
+  return `<div class="${cls.join(' ')}" onclick="selectDay('${dateStr}')">
+    <div class="cal-daynum">${d}</div>
+    ${events}
+  </div>`;
+}
+
+function selectDay(dateStr) {
+  selectedDate = dateStr;
+  renderCalendar();
+}
+
+function renderCalDetail() {
+  const detail = document.getElementById('calDetail');
+
+  const weekdayNames = ['日', '一', '二', '三', '四', '五', '六'];
+  const [yy, mm, dd] = selectedDate.split('-').map(Number);
+  const wd = new Date(yy, mm - 1, dd).getDay();
+  const dateLabel = `${yy}年${mm}月${dd}日 星期${weekdayNames[wd]}`;
+
+  const typeLabels = { plan: '计划', case: '案件', cert: '证件', other: '其他' };
+  const items = [];
+  getData('plans').forEach(p => { if (planDate(p) === selectedDate) items.push({ type: 'plan', item: p }); });
+  getData('cases').forEach(c => { if (c.dueDate === selectedDate) items.push({ type: 'case', item: c }); });
+  getData('certs').forEach(c => { if (c.dueDate === selectedDate) items.push({ type: 'cert', item: c }); });
+  getData('others').forEach(o => { if (o.dueDate === selectedDate) items.push({ type: 'other', item: o }); });
+
+  let plansHtml = '';
+  if (items.length === 0) {
+    plansHtml = `<div class="empty-state" style="padding:16px;"><div class="empty-text">这一天还没有事项，下方添加一条提醒吧</div></div>`;
+  } else {
+    plansHtml = '<ul class="cal-day-plans">';
+    items.forEach(({ type, item }) => {
+      const isDone = item.status === 'done';
+      const timeHtml = (type === 'plan' && item.dueTime) ? `<div class="cal-plan-time">${item.dueTime}</div>` : `<div class="cal-plan-time empty">—</div>`;
+      let actionBtn;
+      if (type === 'case') {
+        actionBtn = `<span class="cal-plan-del" onclick="event.stopPropagation();openCase(${item.id})" title="打开案件">📂</span>`;
+      } else if (type === 'plan') {
+        actionBtn = `<span class="cal-plan-del" onclick="deletePlan(${item.id})" title="删除">🗑️</span>`;
+      } else if (type === 'cert') {
+        actionBtn = `<span class="cal-plan-del" onclick="deleteCert(${item.id})" title="删除">🗑️</span>`;
+      } else {
+        actionBtn = `<span class="cal-plan-del" onclick="deleteOther(${item.id})" title="删除">🗑️</span>`;
+      }
+      const openAttr = type === 'case' ? `onclick="openCase(${item.id})" style="cursor:pointer;"` : '';
+      plansHtml += `
+        <li class="cal-day-plan" ${openAttr}>
+          ${timeHtml}
+          <div class="cal-plan-body">
+            <div class="cal-plan-title ${isDone ? 'done' : ''}">${escapeHTML(item.title)}</div>
+          </div>
+          <span class="cal-plan-type type-${type}">${typeLabels[type]}</span>
+          <span class="cal-plan-status ${item.status}">${isDone ? '已完成' : '进行中'}</span>
+          ${actionBtn}
+        </li>`;
+    });
+    plansHtml += '</ul>';
+  }
+
+  detail.innerHTML = `
+    <div class="cal-detail-title">📌 ${dateLabel}</div>
+    <div class="cal-legend">
+      <span><i style="background:var(--accent-light)"></i>计划</span>
+      <span><i style="background:#fdeaea"></i>案件</span>
+      <span><i style="background:#fff3e0"></i>证件</span>
+      <span><i style="background:#e8f4fd"></i>其他</span>
+    </div>
+    <div class="cal-add-form">
+      <div class="cal-add-row">
+        <input type="date" id="calDateInput" value="${selectedDate}">
+        <input type="time" id="calTimeInput">
+        <input type="text" id="calMatterInput" class="matter-input" placeholder="事项摘要，例：与投资方召开可行性评审会">
+      </div>
+      <button class="cal-add-btn" onclick="addPlanFromCalendar()">+ 添加工作计划提醒</button>
+    </div>
+    ${plansHtml}
+  `;
+}
+
+function addPlanFromCalendar() {
+  const dateInput = document.getElementById('calDateInput');
+  const timeInput = document.getElementById('calTimeInput');
+  const matterInput = document.getElementById('calMatterInput');
+  const text = matterInput.value.trim();
+  if (!text) { showToast('请输入事项摘要', 'error'); matterInput.focus(); return; }
+  const dueDate = dateInput.value || selectedDate;
+  const dueTime = timeInput.value || '';
+  const now = new Date();
+  const plans = getData('plans');
+  plans.unshift({
+    id: Date.now(),
+    title: text,
+    status: 'in-progress',
+    date: now.toISOString().split('T')[0],
+    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    dueDate, dueTime,
+  });
+  setData('plans', plans);
+  matterInput.value = '';
+  timeInput.value = '';
+  selectedDate = dueDate;
+  loadAllData();
+  renderCalendar();
+  showToast('提醒已添加', 'success');
 }
 
 // ============ REMINDERS ============
@@ -1595,7 +3583,7 @@ function checkReminders() {
     const list = document.getElementById('reminderList');
     list.innerHTML = '';
     inProgress.slice(0, 5).forEach(p => {
-      list.innerHTML += `<li class="reminder-item">📋 ${escapeHTML(p.title)}</li>`;
+      list.innerHTML += `<li class="reminder-item">📋 ${escapeHTML(p.title)}（${planDate(p)} ${p.dueTime || ''}）</li>`;
     });
     document.getElementById('reminderOverlay').classList.add('show');
   }
@@ -1609,10 +3597,14 @@ function closeReminder() {
 function loadAllData() {
   renderPlans();
   renderMemos();
+  renderNotes();
   renderCases();
   renderCerts();
   renderOthers();
   renderMaterials();
+  renderTodos();
+  renderTrash();
+  updateTrashBadge();
 }
 
 function escapeHTML(str) {
