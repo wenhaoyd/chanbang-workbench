@@ -652,6 +652,101 @@ body {
   background: var(--accent-hover);
 }
 
+/* ===== PLAN FORM (工作计划 添加/编辑) ===== */
+.pform-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 10px rgba(120,150,170,0.08);
+  transition: box-shadow .2s, border-color .2s;
+}
+.pform-card.editing {
+  border-color: var(--accent);
+  box-shadow: 0 4px 18px rgba(122,178,178,0.22);
+}
+.pform-top { display: flex; gap: 8px; align-items: center; }
+.pform-title {
+  flex: 1;
+  padding: 11px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: var(--bg-primary);
+  font-family: inherit;
+  transition: all .2s;
+}
+.pform-title:focus { border-color: var(--accent); background: #fff; }
+.pform-chevron {
+  width: 42px; height: 44px;
+  border: 2px solid var(--border);
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-secondary);
+  transition: all .2s;
+}
+.pform-chevron:hover { border-color: var(--accent); color: var(--accent-hover); }
+.pform-body { display: none; margin-top: 14px; }
+.pform-card.expanded .pform-body { display: block; }
+.pform-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.pform-field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+.pform-field label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.pform-field input[type=date], .pform-field select, .pform-time input[type=time] {
+  padding: 9px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: var(--bg-primary);
+  font-family: inherit;
+  transition: all .2s;
+}
+.pform-field input:focus, .pform-field select:focus { border-color: var(--accent); background: #fff; }
+.pform-time { display: flex; gap: 8px; }
+.pform-time select { flex: 1; }
+.pform-summary {
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  outline: none;
+  background: var(--bg-primary);
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.5;
+  transition: all .2s;
+}
+.pform-summary:focus { border-color: var(--accent); background: #fff; }
+.pform-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+.pform-add {
+  padding: 9px 22px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all .2s;
+}
+.pform-add:hover { background: var(--accent-hover); }
+.pform-cancel {
+  padding: 9px 18px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all .2s;
+}
+.pform-cancel:hover { border-color: var(--danger); color: var(--danger); }
+
 /* Reminder Popup */
 .reminder-overlay {
   position: fixed;
@@ -1812,9 +1907,39 @@ body {
         <div class="page-title">工作计划</div>
         <div class="page-subtitle">管理你的所有工作安排与任务（也可在「日历」中按日期添加）</div>
       </div>
-      <div class="quick-add">
-        <input type="text" id="planInput" placeholder="添加新计划... 例：完成老挝土地投资可行性报告" onkeydown="if(event.key==='Enter')addPlan()">
-        <button onclick="addPlan()">+ 添加计划</button>
+      <div class="pform-card expanded" id="planFormCard">
+        <div class="pform-top">
+          <input type="text" id="planInput" class="pform-title" placeholder="添加新计划 / 点右侧 ⌄ 可展开设置日期、时间、摘要…" onkeydown="if(event.key==='Enter')addPlan()">
+          <button class="pform-chevron" onclick="togglePlanFormExpand()" title="展开 / 收起">⌄</button>
+        </div>
+        <div class="pform-body" id="planFormBody">
+          <div class="pform-row">
+            <div class="pform-field">
+              <label>日期</label>
+              <input type="date" id="planDateInput">
+            </div>
+            <div class="pform-field">
+              <label>时间</label>
+              <div class="pform-time">
+                <select id="planTimeType" onchange="togglePlanTimeInput()">
+                  <option value="">不指定</option>
+                  <option value="上午">☀️ 上午</option>
+                  <option value="下午">🌤️ 下午</option>
+                  <option value="custom">⏰ 指定时间</option>
+                </select>
+                <input type="time" id="planTimeInput" style="display:none;">
+              </div>
+            </div>
+          </div>
+          <div class="pform-field">
+            <label>内容摘要 / 进展备注（可随时回来继续补充）</label>
+            <textarea id="planSummaryInput" class="pform-summary" rows="2" placeholder="补充事项说明、进展、备注……"></textarea>
+          </div>
+        </div>
+        <div class="pform-actions">
+          <button class="pform-cancel" id="planCancelBtn" style="display:none;" onclick="cancelPlanEdit()">取消</button>
+          <button class="pform-add" id="planAddBtn" onclick="addPlan()">+ 添加计划</button>
+        </div>
       </div>
       <div class="dashboard-section">
         <ul class="task-list" id="allPlans"></ul>
@@ -2196,17 +2321,27 @@ let editingPlanId = null;
 function addPlan() {
   const input = document.getElementById('planInput');
   const text = input.value.trim();
-  if (!text) return;
-  const now = new Date();
+  if (!text) { showToast('请输入计划标题', 'error'); input.focus(); return; }
+  const dateInput = document.getElementById('planDateInput');
+  const timeType = document.getElementById('planTimeType');
+  const timeInput = document.getElementById('planTimeInput');
+  const summaryInput = document.getElementById('planSummaryInput');
+  const dueDate = (dateInput && dateInput.value) || new Date().toISOString().split('T')[0];
+  let dueTime = '';
+  if (timeType && timeType.value === 'custom') dueTime = (timeInput && timeInput.value) || '';
+  else if (timeType && (timeType.value === '上午' || timeType.value === '下午')) dueTime = timeType.value;
+  const summary = (summaryInput && summaryInput.value || '').trim();
   const plans = getData('plans');
   if (editingPlanId) {
     const p = plans.find(x => x.id === editingPlanId);
-    if (p) p.title = text;
+    if (p) {
+      p.title = text;
+      p.dueDate = dueDate;
+      p.dueTime = dueTime;
+      p.summary = summary;
+    }
     setData('plans', plans);
-    editingPlanId = null;
-    input.value = '';
-    const btn = document.querySelector('#page-plans .quick-add button');
-    if (btn) btn.textContent = '+ 添加计划';
+    exitPlanEdit();
     loadAllData();
     renderCalendar();
     showToast('计划已更新', 'success');
@@ -2215,14 +2350,17 @@ function addPlan() {
   plans.unshift({
     id: Date.now(),
     title: text,
+    summary,
     status: 'in-progress',
-    date: now.toISOString().split('T')[0],
-    time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
-    dueDate: now.toISOString().split('T')[0],
-    dueTime: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+    dueDate, dueTime,
   });
   setData('plans', plans);
   input.value = '';
+  if (summaryInput) summaryInput.value = '';
+  if (timeType) timeType.value = '';
+  if (timeInput) { timeInput.value = ''; timeInput.style.display = 'none'; }
   loadAllData();
   renderCalendar();
   showToast('计划已添加', 'success');
@@ -2234,10 +2372,62 @@ function editPlan(id) {
   editingPlanId = id;
   const input = document.getElementById('planInput');
   input.value = p.title;
-  input.focus();
-  const btn = document.querySelector('#page-plans .quick-add button');
+  const dateInput = document.getElementById('planDateInput');
+  if (dateInput) dateInput.value = planDate(p);
+  const timeType = document.getElementById('planTimeType');
+  const timeInput = document.getElementById('planTimeInput');
+  if (timeType) {
+    if (p.dueTime === '上午' || p.dueTime === '下午') timeType.value = p.dueTime;
+    else if (p.dueTime) timeType.value = 'custom';
+    else timeType.value = '';
+  }
+  if (timeInput) {
+    if (p.dueTime && p.dueTime !== '上午' && p.dueTime !== '下午') { timeInput.value = p.dueTime; timeInput.style.display = 'inline-block'; }
+    else { timeInput.value = ''; timeInput.style.display = 'none'; }
+  }
+  const summaryInput = document.getElementById('planSummaryInput');
+  if (summaryInput) summaryInput.value = p.summary || '';
+  const card = document.getElementById('planFormCard');
+  if (card) { card.classList.add('editing'); card.classList.add('expanded'); }
+  const btn = document.getElementById('planAddBtn');
   if (btn) btn.textContent = '✓ 更新计划';
+  const cancelBtn = document.getElementById('planCancelBtn');
+  if (cancelBtn) cancelBtn.style.display = 'inline-block';
+  input.focus();
   document.getElementById('page-plans').scrollIntoView({ behavior: 'smooth' });
+}
+
+function togglePlanFormExpand() {
+  const card = document.getElementById('planFormCard');
+  if (card) card.classList.toggle('expanded');
+}
+
+function togglePlanTimeInput() {
+  const timeType = document.getElementById('planTimeType');
+  const timeInput = document.getElementById('planTimeInput');
+  if (!timeType || !timeInput) return;
+  timeInput.style.display = (timeType.value === 'custom') ? 'inline-block' : 'none';
+  if (timeType.value !== 'custom') timeInput.value = '';
+}
+
+function cancelPlanEdit() { exitPlanEdit(); }
+
+function exitPlanEdit() {
+  editingPlanId = null;
+  const input = document.getElementById('planInput');
+  if (input) input.value = '';
+  const summaryInput = document.getElementById('planSummaryInput');
+  if (summaryInput) summaryInput.value = '';
+  const timeType = document.getElementById('planTimeType');
+  if (timeType) timeType.value = '';
+  const timeInput = document.getElementById('planTimeInput');
+  if (timeInput) { timeInput.value = ''; timeInput.style.display = 'none'; }
+  const btn = document.getElementById('planAddBtn');
+  if (btn) btn.textContent = '+ 添加计划';
+  const cancelBtn = document.getElementById('planCancelBtn');
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  const card = document.getElementById('planFormCard');
+  if (card) card.classList.remove('editing');
 }
 
 function togglePlan(id) {
@@ -2255,7 +2445,7 @@ function deletePlan(id) {
   const p = getData('plans').find(x => x.id === id);
   if (!p) return;
   if (!confirm('确定要删除这个计划吗？（可到「垃圾箱」恢复）')) return;
-  if (editingPlanId === id) { editingPlanId = null; const btn = document.querySelector('#page-plans .quick-add button'); if (btn) btn.textContent = '+ 添加计划'; }
+  if (editingPlanId === id) { exitPlanEdit(); }
   moveToTrash('workplan', '工作计划', p);
   setData('plans', getData('plans').filter(x => x.id !== id));
   loadAllData();
@@ -2269,6 +2459,9 @@ function renderPlans() {
   const plans = getData('plans');
   const inProgress = plans.filter(p => p.status === 'in-progress');
   const done = plans.filter(p => p.status === 'done');
+
+  const di = document.getElementById('planDateInput');
+  if (di && !di.value && !editingPlanId) di.value = new Date().toISOString().split('T')[0];
 
   document.getElementById('statPlansInProgress').textContent = inProgress.length;
   document.getElementById('statPlansDone').textContent = done.length;
