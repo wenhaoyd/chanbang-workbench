@@ -736,165 +736,233 @@ body {
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
 
-/* ===== CALENDAR ===== */
+/* ===== CALENDAR (relaxed redesign) ===== */
+#page-calendar .page-header {
+  background: linear-gradient(135deg, #e8f8f3 0%, #eaf3fb 100%);
+  border: 1px solid #d6efe8;
+  border-radius: 20px;
+  padding: 22px 28px;
+  box-shadow: 0 8px 24px rgba(70,160,150,.08);
+  margin-bottom: 22px;
+}
+#page-calendar .page-title { color: #2c7a7b; font-size: 24px; }
+#page-calendar .page-subtitle { color: #5d8d88; }
+
 .calendar-toolbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
 }
 
 .cal-nav-btn {
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  border-radius: var(--radius-sm);
-  font-size: 18px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d9efe9;
+  background: #fff;
+  border-radius: 14px;
+  font-size: 20px;
   cursor: pointer;
-  color: #0f2b46;
-  transition: all 0.2s;
+  color: #2c7a7b;
+  transition: all .2s;
+  box-shadow: 0 2px 8px rgba(70,160,150,.06);
 }
 
 .cal-nav-btn:hover {
-  background: var(--accent-light);
-  border-color: var(--accent);
+  background: #e8f8f3;
+  transform: translateY(-1px);
 }
 
 .cal-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #0f2b46;
-  min-width: 140px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #2c7a7b;
+  min-width: 150px;
   text-align: center;
+  letter-spacing: 1px;
 }
 
 .cal-today-btn {
-  padding: 8px 18px;
-  background: var(--accent);
+  padding: 10px 22px;
+  background: linear-gradient(135deg,#3bbfa6,#2c9c8a);
   color: #fff;
   border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
+  border-radius: 14px;
+  font-weight: 700;
   cursor: pointer;
   margin-left: auto;
+  box-shadow: 0 6px 16px rgba(44,156,138,.28);
+  transition: all .2s;
 }
 
-.cal-today-btn:hover { background: var(--accent-hover); }
+.cal-today-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(44,156,138,.36); }
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 10px;
 }
 
 .cal-weekday {
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   padding: 10px 0;
-  color: var(--text-secondary);
+  color: #6f9c97;
   font-size: 13px;
-  background: var(--bg-card);
-  border-radius: var(--radius-sm);
+  background: #f1f9f6;
+  border-radius: 12px;
 }
 
 .cal-cell {
-  min-height: 96px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 6px;
-  background: var(--bg-card);
+  min-height: 108px;
+  border: 1px solid #e6f0ee;
+  border-radius: 16px;
+  padding: 8px 8px 6px;
+  background: #fff;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all .2s;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   overflow: hidden;
 }
 
 .cal-cell:hover {
-  border-color: var(--accent);
-  box-shadow: var(--shadow);
+  border-color: #9fded0;
+  box-shadow: 0 10px 26px rgba(60,150,140,.14);
+  transform: translateY(-2px);
 }
 
 .cal-cell.today {
-  background: var(--accent-light);
-  border-color: var(--accent);
+  background: linear-gradient(165deg,#ecfbf5,#dff4ec);
+  border-color: #7fd2bf;
 }
 
 .cal-cell.selected {
-  box-shadow: 0 0 0 2px var(--accent);
+  box-shadow: 0 0 0 3px #4fc3ab;
+  border-color: #4fc3ab;
 }
 
 .cal-cell.other-month {
-  opacity: 0.38;
-  background: #faf9f6;
+  opacity: .45;
+  background: #fbfdfc;
 }
 
 .cal-daynum {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+  color: #3a5b56;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .cal-cell.today .cal-daynum {
-  color: var(--accent-hover);
+  background: #2c9c8a;
+  color: #fff;
+}
+
+.cal-cell.selected .cal-daynum {
+  background: #4fc3ab;
+  color: #fff;
 }
 
 .cal-event {
   font-size: 11px;
-  background: var(--accent-light);
-  color: #8a6d1f;
-  border-radius: 4px;
-  padding: 2px 5px;
+  border-radius: 8px;
+  padding: 3px 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.4;
+  font-weight: 600;
 }
 
 .cal-event.done {
-  background: #e8f5e9;
-  color: #1e7e34;
+  opacity: .55;
   text-decoration: line-through;
 }
 
 .cal-event .ev-time {
-  font-weight: 700;
+  font-weight: 800;
   margin-right: 3px;
 }
 
 .cal-more {
   font-size: 11px;
-  color: var(--text-secondary);
+  color: #88aaa5;
   padding-left: 5px;
+  font-weight: 600;
 }
 
 /* Calendar Detail Panel */
-.cal-detail {
-  margin-top: 20px;
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  padding: 22px;
-  box-shadow: var(--shadow);
+.cal-detail { margin-top: 22px; }
+
+.cal-detail-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 12px 34px rgba(60,150,140,.12);
+  border: 1px solid #edf5f2;
+}
+
+.cal-detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
 .cal-detail-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: #0f2b46;
-  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #2c7a7b;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.cal-add-form {
-  background: var(--bg-primary);
-  border-radius: var(--radius-sm);
-  padding: 14px;
+.cal-detail-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2c9c8a;
+  background: #e6f8f2;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.cal-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
+  font-size: 12px;
+  color: #6f9c97;
+}
+
+.cal-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-legend i {
+  width: 11px;
+  height: 11px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.cal-add-form {
+  background: linear-gradient(135deg,#f6fbfa,#eef7f4);
+  border: 1px solid #e1f0ec;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 18px;
 }
 
 .cal-add-row {
@@ -904,20 +972,23 @@ body {
   margin-bottom: 10px;
 }
 
-.cal-add-row input {
+.cal-add-row input,
+.cal-add-row select {
   flex: 1;
   min-width: 120px;
-  padding: 9px 12px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  border: 2px solid #dcefe9;
+  border-radius: 12px;
   font-size: 14px;
   outline: none;
   background: #fff;
   font-family: inherit;
+  color: #3a5b56;
 }
 
-.cal-add-row input:focus {
-  border-color: var(--accent);
+.cal-add-row input:focus,
+.cal-add-row select:focus {
+  border-color: #4fc3ab;
 }
 
 .cal-add-row .matter-input {
@@ -925,19 +996,48 @@ body {
   min-width: 200px;
 }
 
-.cal-add-btn {
+.cal-summary-input {
   width: 100%;
-  padding: 10px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  cursor: pointer;
+  min-height: 56px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 2px solid #dcefe9;
+  border-radius: 12px;
   font-size: 14px;
+  outline: none;
+  background: #fff;
+  font-family: inherit;
+  color: #3a5b56;
+  margin-bottom: 12px;
 }
 
-.cal-add-btn:hover { background: var(--accent-hover); }
+.cal-summary-input:focus { border-color: #4fc3ab; }
+
+.cal-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg,#3bbfa6,#2c9c8a);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 0 6px 16px rgba(44,156,138,.26);
+  transition: all .2s;
+}
+
+.cal-add-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(44,156,138,.34); }
+
+.cal-empty {
+  text-align: center;
+  padding: 28px 16px;
+  color: #8aaea8;
+  font-size: 14px;
+  background: #f6fbfa;
+  border-radius: 14px;
+  border: 1px dashed #cfe9e2;
+}
 
 .cal-day-plans {
   list-style: none;
@@ -947,26 +1047,33 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  margin-bottom: 8px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #eaf3f0;
+  margin-bottom: 10px;
   background: #fff;
+  transition: all .2s;
 }
 
 .cal-day-plan:hover {
-  background: var(--bg-primary);
+  background: #f5fbf9;
+  border-color: #cdeee6;
 }
 
 .cal-plan-time {
   font-size: 13px;
-  font-weight: 700;
-  color: var(--accent-hover);
-  min-width: 48px;
+  font-weight: 800;
+  color: #2c9c8a;
+  min-width: 52px;
+  text-align: center;
+  background: #e6f8f2;
+  padding: 4px 6px;
+  border-radius: 10px;
 }
 
 .cal-plan-time.empty {
-  color: #bbb;
+  color: #b6c9c5;
+  background: #f1f5f4;
 }
 
 .cal-plan-body {
@@ -975,40 +1082,59 @@ body {
 }
 
 .cal-plan-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2f4d48;
 }
 
 .cal-plan-title.done {
   text-decoration: line-through;
-  color: #aaa;
+  color: #a9bcb8;
+}
+
+.cal-plan-summary {
+  font-size: 13px;
+  color: #6f8c87;
+  margin-top: 3px;
+  line-height: 1.5;
+  border-left: 3px solid #cdeee6;
+  padding-left: 8px;
 }
 
 .cal-plan-status {
   font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 .cal-plan-status.in-progress {
   background: #fff3e0;
-  color: #e67e22;
+  color: #d98a3d;
 }
 
 .cal-plan-status.done {
-  background: #e8f5e9;
-  color: var(--success);
+  background: #e6f7ec;
+  color: #2c9c6a;
 }
 
 .cal-plan-del {
   cursor: pointer;
-  color: #ccc;
-  font-size: 16px;
+  color: #cfd9d6;
+  font-size: 17px;
   padding: 4px;
+  transition: all .2s;
 }
 
-.cal-plan-del:hover { color: var(--danger); }
+.cal-plan-del:hover { color: #e0664f; }
+
+/* plan summary line on the 工作计划 page */
+.task-meta2 {
+  font-size: 12px;
+  color: #6f8c87;
+  margin-top: 2px;
+  line-height: 1.45;
+}
 
 /* ===== NOTES / 备忘录 ===== */
 .note-form {
@@ -1192,21 +1318,22 @@ body {
 .cal-legend i {
   width: 10px; height: 10px; border-radius: 3px; display: inline-block;
 }
-.cal-event.type-plan { background: var(--accent-light); color: #8a6d1f; }
-.cal-event.type-case { background: #fdeaea; color: #c0392b; }
-.cal-event.type-cert { background: #fff3e0; color: #e67e22; }
-.cal-event.type-other { background: #e8f4fd; color: #2980b9; }
+.cal-event.type-plan { background: #e1f3ee; color: #1f7a6b; }
+.cal-event.type-case { background: #fdeef0; color: #c8586a; }
+.cal-event.type-cert { background: #fff1e3; color: #d98a3d; }
+.cal-event.type-other { background: #eaf1fb; color: #5a86c4; }
 
 .cal-day-plans .cal-plan-type {
   font-size: 11px;
-  padding: 1px 8px;
-  border-radius: 10px;
-  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 700;
   margin-left: 8px;
 }
-.cal-plan-type.type-plan { background: var(--accent-light); color: #8a6d1f; }
-.cal-plan-type.type-case { background: #fdeaea; color: #c0392b; }
-.cal-plan-type.type-cert { background: #fff3e0; color: #e67e22; }
+.cal-plan-type.type-plan { background: #e1f3ee; color: #1f7a6b; }
+.cal-plan-type.type-case { background: #fdeef0; color: #c8586a; }
+.cal-plan-type.type-cert { background: #fff1e3; color: #d98a3d; }
+.cal-plan-type.type-other { background: #eaf1fb; color: #5a86c4; }
 .cal-plan-type.type-other { background: #e8f4fd; color: #2980b9; }
 
 /* ===== List inline edit ===== */
@@ -2178,12 +2305,14 @@ function renderPlans() {
 function planItemHTML(p) {
   const isDone = p.status === 'done';
   const d = planDate(p);
+  const summaryHtml = p.summary ? `<div class="task-meta2">${escapeHTML(p.summary)}</div>` : '';
   return `
     <li class="task-item">
       <div class="task-check ${isDone ? 'done' : ''}" onclick="togglePlan(${p.id})">${isDone ? '✓' : ''}</div>
       <div class="task-content">
         <div class="task-title ${isDone ? 'done' : ''}">${escapeHTML(p.title)}</div>
         <div class="task-meta">${d} ${p.dueTime || ''}</div>
+        ${summaryHtml}
       </div>
       <span class="task-status ${p.status}">${isDone ? '已完成' : '进行中'}</span>
       <span style="cursor:pointer;color:#ccc;margin-left:4px;" onclick="editPlan(${p.id})" title="编辑">✏️</span>
@@ -3538,15 +3667,18 @@ function renderCalDetail() {
   getData('cases').forEach(c => { if (c.dueDate === selectedDate) items.push({ type: 'case', item: c }); });
   getData('certs').forEach(c => { if (c.dueDate === selectedDate) items.push({ type: 'cert', item: c }); });
   getData('others').forEach(o => { if (o.dueDate === selectedDate) items.push({ type: 'other', item: o }); });
+  // 按时间排序：上午 < 下午 < 具体时间
+  items.sort((a, b) => (a.item.dueTime || '').localeCompare(b.item.dueTime || ''));
 
   let plansHtml = '';
   if (items.length === 0) {
-    plansHtml = `<div class="empty-state" style="padding:16px;"><div class="empty-text">这一天还没有事项，下方添加一条提醒吧</div></div>`;
+    plansHtml = `<div class="cal-empty">🌿 这一天还没有安排，在下方添加一条工作计划吧</div>`;
   } else {
     plansHtml = '<ul class="cal-day-plans">';
     items.forEach(({ type, item }) => {
       const isDone = item.status === 'done';
-      const timeHtml = (type === 'plan' && item.dueTime) ? `<div class="cal-plan-time">${item.dueTime}</div>` : `<div class="cal-plan-time empty">—</div>`;
+      const timeText = (type === 'plan' && item.dueTime) ? item.dueTime : '';
+      const timeHtml = timeText ? `<div class="cal-plan-time">${timeText}</div>` : `<div class="cal-plan-time empty">—</div>`;
       let actionBtn;
       if (type === 'case') {
         actionBtn = `<span class="cal-plan-del" onclick="event.stopPropagation();openCase(${item.id})" title="打开案件">📂</span>`;
@@ -3558,11 +3690,13 @@ function renderCalDetail() {
         actionBtn = `<span class="cal-plan-del" onclick="deleteOther(${item.id})" title="删除">🗑️</span>`;
       }
       const openAttr = type === 'case' ? `onclick="openCase(${item.id})" style="cursor:pointer;"` : '';
+      const summaryHtml = (type === 'plan' && item.summary) ? `<div class="cal-plan-summary">${escapeHTML(item.summary)}</div>` : '';
       plansHtml += `
         <li class="cal-day-plan" ${openAttr}>
           ${timeHtml}
           <div class="cal-plan-body">
             <div class="cal-plan-title ${isDone ? 'done' : ''}">${escapeHTML(item.title)}</div>
+            ${summaryHtml}
           </div>
           <span class="cal-plan-type type-${type}">${typeLabels[type]}</span>
           <span class="cal-plan-status ${item.status}">${isDone ? '已完成' : '进行中'}</span>
@@ -3573,38 +3707,64 @@ function renderCalDetail() {
   }
 
   detail.innerHTML = `
-    <div class="cal-detail-title">📌 ${dateLabel}</div>
-    <div class="cal-legend">
-      <span><i style="background:var(--accent-light)"></i>计划</span>
-      <span><i style="background:#fdeaea"></i>案件</span>
-      <span><i style="background:#fff3e0"></i>证件</span>
-      <span><i style="background:#e8f4fd"></i>其他</span>
-    </div>
-    <div class="cal-add-form">
-      <div class="cal-add-row">
-        <input type="date" id="calDateInput" value="${selectedDate}">
-        <input type="time" id="calTimeInput">
-        <input type="text" id="calMatterInput" class="matter-input" placeholder="事项摘要，例：与投资方召开可行性评审会">
+    <div class="cal-detail-card">
+      <div class="cal-detail-head">
+        <div class="cal-detail-title">📌 ${dateLabel}</div>
+        <div class="cal-detail-count">${items.length} 项安排</div>
       </div>
-      <button class="cal-add-btn" onclick="addPlanFromCalendar()">+ 添加工作计划提醒</button>
+      <div class="cal-legend">
+        <span><i style="background:#e1f3ee"></i>计划</span>
+        <span><i style="background:#fdeef0"></i>案件</span>
+        <span><i style="background:#fff1e3"></i>证件</span>
+        <span><i style="background:#eaf1fb"></i>其他</span>
+      </div>
+      <div class="cal-add-form">
+        <div class="cal-add-row">
+          <input type="date" id="calDateInput" value="${selectedDate}">
+          <select id="calTimeType" onchange="toggleCalTimeInput()">
+            <option value="">不指定时间</option>
+            <option value="上午">☀️ 上午</option>
+            <option value="下午">🌤️ 下午</option>
+            <option value="custom">⏰ 指定时间</option>
+          </select>
+          <input type="time" id="calTimeInput" style="display:none">
+        </div>
+        <div class="cal-add-row">
+          <input type="text" id="calMatterInput" class="matter-input" placeholder="事项标题，例：与投资方召开可行性评审会">
+        </div>
+        <textarea id="calSummaryInput" class="cal-summary-input" placeholder="内容摘要（可选），例：确认投资金额、股权比例与土地权属文件"></textarea>
+        <button class="cal-add-btn" onclick="addPlanFromCalendar()">＋ 添加工作计划</button>
+      </div>
+      ${plansHtml}
     </div>
-    ${plansHtml}
   `;
+}
+
+function toggleCalTimeInput() {
+  const t = document.getElementById('calTimeType');
+  const ti = document.getElementById('calTimeInput');
+  if (t && ti) ti.style.display = (t.value === 'custom') ? 'inline-block' : 'none';
 }
 
 function addPlanFromCalendar() {
   const dateInput = document.getElementById('calDateInput');
+  const timeType = document.getElementById('calTimeType');
   const timeInput = document.getElementById('calTimeInput');
   const matterInput = document.getElementById('calMatterInput');
+  const summaryInput = document.getElementById('calSummaryInput');
   const text = matterInput.value.trim();
-  if (!text) { showToast('请输入事项摘要', 'error'); matterInput.focus(); return; }
+  if (!text) { showToast('请输入事项标题', 'error'); matterInput.focus(); return; }
   const dueDate = dateInput.value || selectedDate;
-  const dueTime = timeInput.value || '';
+  let dueTime = '';
+  if (timeType && timeType.value === 'custom') dueTime = timeInput.value || '';
+  else if (timeType && (timeType.value === '上午' || timeType.value === '下午')) dueTime = timeType.value;
+  const summary = (summaryInput && summaryInput.value || '').trim();
   const now = new Date();
   const plans = getData('plans');
   plans.unshift({
     id: Date.now(),
     title: text,
+    summary,
     status: 'in-progress',
     date: now.toISOString().split('T')[0],
     time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
@@ -3612,11 +3772,13 @@ function addPlanFromCalendar() {
   });
   setData('plans', plans);
   matterInput.value = '';
-  timeInput.value = '';
+  if (summaryInput) summaryInput.value = '';
+  if (timeType) timeType.value = '';
+  if (timeInput) { timeInput.value = ''; timeInput.style.display = 'none'; }
   selectedDate = dueDate;
   loadAllData();
   renderCalendar();
-  showToast('提醒已添加', 'success');
+  showToast('计划已添加', 'success');
 }
 
 // ============ REMINDERS ============
